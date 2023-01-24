@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GrandAssembly | Verify your account</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body>
+    <div class="center-div-join">
+        <h1 class="join-header">Verify Phone Number</h1>
+        <h2 class="slogan-header">Assemble together and<span id="slogan-word"> share </span>without bots and spammers.</h2>
+    </div>
+    <div class="center-div-form">
+        <div id="alerts-div" style="color: dodgerblue; font-family: Roboto; font-size: 1rem">
+
+        </div>
+        <br>
+        <form id="form-inputs-1" method="post" enctype="multipart/form-data">
+            <div class="group">
+                 <label style="font-family: Roboto">SMS Authentication Code</label>
+                 <input type="number" name="sms_code" class="text-form-input">
+            </div>
+            <br>
+
+          <br>
+          <button class="button-main-register">SIGN IN</button>
+        </form>
+    </div>
+    <script src="/scripts/account/change-text.js"></script>
+    <script src="/scripts/account/register-actions.js"></script>
+</body>
+</html>

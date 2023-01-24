@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GrandAssembly | Join the democratisation</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
+</head>
+<body>
+    <div class="center-div-join">
+        <h1 class="join-header">Join us</h1>
+        <h2 class="slogan-header">Assemble together and<span id="slogan-word"> share </span>without bots and spammers.</h2>
+    </div>
+    <div class="center-div-form">
+        <div id="alerts-div" style="color: dodgerblue; font-family: Roboto; font-size: 1rem">
+
+        </div>
+        <br>
+        <div id="form-inputs-1">
+            <div class="group">
+                 <label style="font-family: Roboto">Username</label>
+                 <input type="username" id="username" class="text-form-input">
+            </div>
+            <br>
+            <div class="group">
+                 <label style="font-family: Roboto">Password</label>
+                 <input type="password" id="password" class="text-form-input">
+            </div>
+        </div>
+        <div id="form-inputs-2" style="display: none">
+            <div class="group">
+             <label style="font-family: Roboto">Email</label>
+             <input type="text" id="email" class="text-form-input">
+            </div>
+            <br>
+            <div class="group">
+             <label style="font-family: Roboto">Phone Number</label>
+             <input type="text" id="phone_number" class="text-form-input" placeholder="with country code">
+            </div>
+        </div>
+        <br>
+        <button onclick="proceedRegistration()" class="button-main-register">CONTINUE</button>
+    </div>
+    <script src="/scripts/account/change-text.js"></script>
+    <script src="/scripts/account/register-actions.js"></script>
+</body>
+</html>

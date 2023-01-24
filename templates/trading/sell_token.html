@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/styles/account/index.css">
+  <title>Document</title>
+</head>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/trading/index.css">
+<body>
+
+<form id="calc-container" enctype="multipart/form-data" method="post">
+  <div class="bill-side">
+    <div class="bill">
+      <h3>Payment Information</h3>
+      <input oninput="coinPriceCal(this)" type="text" name="payment_info" class="people-number" placeholder="Bank Info or Crypto Wallet" style="text-align: left; text-indent: 1rem; width: 200%" onchange="calc()">
+    </div>
+    <div class="people">
+      <h3>Password Confirmation</h3>
+      <input  type="password" name="password" class="people-number" placeholder="GrandAssembly password" style="text-align: left; text-indent: 1rem; width: 200%" onchange="calc()">
+    </div>
+    <div class="reset">
+      <input class="button-main-register" value="Confirm" style="text-align: center; width: 80%; height: fit-content" type="submit">
+    </div>
+    <br>
+  </div>
+</form>
+
+<script>
+  function coinPriceCal(element){
+    let amount_of_coins = element.value
+    document.getElementById("total_price").innerHTML = "~$" + ({{ token_price }} * amount_of_coins)
+  }
+</script>
+
+</body>
+</html>

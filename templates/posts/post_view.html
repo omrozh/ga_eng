@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/scripts/home/utils.js"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles/account/index.css">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <title>GrandAssembly | The global discussion</title>
+  <link rel="stylesheet" href="/styles/home/index.css">
+  <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
+</head>
+<body style="padding-bottom: 50px; background-color: white">
+  <div class="header-main" style="z-index: 99">
+      <img src="/static/grandassembly.png" onclick="document.location = '/'" id="assembly-logo" alt="">
+      <span style="float: left; margin-top: 17px" onclick="document.location = '/'">GrandAssembly</span></div>
+        <div style="z-index: 9999; position: relative">
+            {% if not user.is_authenticated %}
+              <i style="font-size: 2rem; position: fixed; right: 15px; top: 8px" onclick="document.location = '/account/login'" class="fa-solid fa-right-to-bracket"></i>
+            {% else %}
+                <i style="font-size: 2rem; position: fixed; right: 15px; top: 8px" onclick="document.location = '/account/logout'" class="fa-solid fa-right-from-bracket"></i>
+                <i style="font-size: 2rem; position: fixed; right: 75px; top: 8px" onclick="window.open('/new/post')" class="fa-solid fa-paper-plane"></i>
+            {% endif %}
+        </div>
+  <div class="side-menu">
+      <h1 style="margin-left: 15px; margin-top: 50px">Top Headers</h1>
+      <hr style="width: 90%">
+      <ul id="top-headers">
+
+      </ul>
+      {% if is_authenticated %}
+      <div style="margin: 15px; position: fixed; bottom: 0px">
+          <hr style="width: 18vw">
+          @{{ user.username }}
+            <p style="color: gray">{{ user.balance }}</p>
+            <i style="position: fixed; left: 15vw; bottom: 50px; font-size: 2rem; margin-top: 5px" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+      </div>
+      {% endif %}
+  </div>
+  <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
+      <h1 style="margin-left: 15px; margin-top: 50px">Tags</h1>
+      <hr style="width: 90%">
+      <ul id="tags-trending">
+      </ul>
+
+  </div>
+  <br>
+  <br>
+  {% if is_authenticated %}
+  <div style="width: 100%; position: fixed; bottom: 0; height: 50px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
+        @{{ user.username }}
+        <p style="color: gray">{{ user.balance }} GAT</p>
+        <i style="position: fixed; right: 10px; bottom: 30px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+  </div>
+  {% endif %}
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
+      <div style="position: relative; top: 20px; float: right; margin-right: 15px">
+          <i onclick="document.location = '/moonvote/{{ post.post_id }}'" style="font-size: 1.5rem; margin-right: 10px" class="fa-solid fa-rocket"></i>
+          <span>{{ post.net_votes }}</span>
+            <i style="margin-left: 10px; font-size: 1.5rem" onclick="document.location = '/hellvote/{{ post.post_id }}'" class="fa-solid fa-fire-flame-simple"></i>
+      </div>
+        <p style="color: gray">@{{ post.creator_username }}</p>
+        <h1>{{ post.title }}</h1>
+      <p>{{ post.text_body }}</p>
+    {% if post.has_image %}
+      <img src="{{ post.image_uri }}" style="width: 100%;" alt="">
+    {% endif %}
+      <br>
+      <br>
+      <form method="post" enctype="multipart/form-data">
+          <input type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); outline: none; width: 90%; font-size: 1rem" name="comment" placeholder="Comment(s)">
+          <br>
+          <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px" onclick="document.location = '/follow-tag/{{ tag_name }}'" class="button-main-register">Post Comment</button>
+      </form>
+      <br>
+      {% for i in comments %}
+          <div style="border: 1px solid #e3e3e3; border-radius: 5px; padding-left: 15px; margin-top: 10px">
+            <p style="color: #888888; font-size: 12px">{{ i.commenter }}</p>
+            <p style="color: black; font-size: 1rem">{{ i.content }}</p>
+          </div>
+      {% endfor %}
+  </div>
+  <script>
+      getTrendingTags()
+      getPostsTopPosts()
+  </script>
+</body>
+</html>

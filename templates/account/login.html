@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GrandAssembly | Sign in to your account</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
+</head>
+<body>
+    <div class="center-div-join" style="top: -600px;">
+        <h1 class="join-header">Welcome back</h1>
+        <h2 class="slogan-header">Assemble together and<span id="slogan-word"> share </span>without bots and spammers.</h2>
+    </div>
+    <div class="center-div-form">
+        <div id="alerts-div" style="color: dodgerblue; font-family: Roboto; font-size: 1rem">
+
+        </div>
+        <br>
+        <form id="form-inputs-1" method="post" enctype="multipart/form-data">
+            <div class="group">
+                 <label style="font-family: Roboto">Username</label>
+                 <input type="username" name="username" class="text-form-input">
+            </div>
+            <br>
+            <div class="group">
+                 <label style="font-family: Roboto">Password</label>
+                 <input type="password" name="password" class="text-form-input">
+            </div>
+          <br>
+          <button class="button-main-register">SIGN IN</button>
+        </form>
+        <p style="font-family: Verdana">Don't have an account? <a href="/account/register" style="color: dodgerblue">Create One!</a></p>
+    </div>
+    <script src="/scripts/account/change-text.js"></script>
+    <script src="/scripts/account/register-actions.js"></script>
+</body>
+</html>

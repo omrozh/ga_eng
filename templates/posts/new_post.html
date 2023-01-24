@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GrandAssembly</title>
+  <link rel="stylesheet" href="/styles/home/index.css">
+  <link rel="stylesheet" href="/styles/forms/index.css">
+</head>
+  <body>
+  <div class="header-main">
+      <img src="/static/grandassembly.png" style="margin-left: 5vw" id="assembly-logo" alt="">
+      <span style="float: left; margin-top: 17px" onclick="document.location = '/'">GrandAssembly</span></div>
+  <div id="wrapper">
+    <div id="header" style="background-color: dodgerblue" class="noselect">
+        Post
+    </div>
+    <form id="content" method="post" enctype="multipart/form-data">
+      <input id="title" name="title" type="text" placeholder="Your title here...">
+      <textarea name="text_body" placeholder="Post body here..." id="editor" style="width: 100%; outline: none; resize: none; padding: 5px; font-family: Verdana"></textarea>
+      <br>
+      <p style="margin-top: 15px; color: white">Post Image</p>
+      <input style="margin-top: 15px" type="file" name="image_file">
+      <br>
+      <div id="footer">
+        <div id="footer-left">
+          <input class="btn btn-primary" style="background-color: dodgerblue" value="Post" type="submit">
+        </div>
+        <div id="footer-right">
+          <p style="color: red">Warning: This action will cost you 2 Tokens!</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

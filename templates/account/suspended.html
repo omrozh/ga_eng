@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Unbounded:wght@500&display=swap');
+        body {
+            background: #e9eaed;
+            margin: 0;
+            padding: 0;
+            font-family: Verdana;
+        }
+
+        .news-feed {
+            width: 750px;
+            min-height: 250px;
+            background: #FFF;
+            margin: 10px auto 0;
+            padding: 10px;
+            border: 1px solid;
+            border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+            box-shadow: 1px 0 5px -2px #888;
+        }
+
+        .side-menu {
+            width: 20vw;
+            position: fixed;
+            height: 100vh;
+            background-color: white;
+            top: 0;
+            border-right: 1px solid rgb(220, 220, 220);
+            z-index: 999;
+        }
+
+        .header-main{
+            border-bottom: 1px solid #d0cfcf;
+            width: 100vw;
+            height: 50px;
+            background-color: white;
+            right: 0;
+            position: fixed;
+            top: 0;
+        }
+
+        #assembly-logo{
+            width: 50px;
+            margin-left: 21vw;
+            float: left
+        }
+
+        #bottom-menu{
+            display: none;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .header-main{
+                width: 100vw;
+            }
+            .side-menu{
+                display: none;
+            }
+            .news-feed{
+                width: 90%;
+            }
+            #assembly-logo{
+                margin-left: 5vw;
+            }
+            #bottom-menu{
+                display: block;
+            }
+        }
+
+        li{
+            list-style-type: none;
+            margin-top: 5px;
+        }
+
+        .fa-rocket:hover{
+            color: dodgerblue;
+        }
+        .fa-fire-flame-simple:hover{
+            color: coral;
+        }
+
+        i{
+            color: gray;
+        }
+
+    </style>
+    <title>Account Suspended | GrandAssembly</title>
+</head>
+<body>
+    <div style="position: absolute; margin: auto; width: fit-content; padding: 15px; height: fit-content; top: 0; left: 0; bottom: 0; right: 0; background-color: white; border-radius: 10px">
+      <h1>Account Suspended</h1>
+      <p>Man, how did you get suspended from somewhere that literally charges you to post. You are up to some really shady stuff.</p>
+      <p>Unfortunately, suspension decisions are final, as I said it is hard to get suspended ;)</p>
+      <p>Here is the reason for suspension:</p>
+      <p>{{ suspension.reason_of_suspension }}</p>
+      <p>{{ suspension.suspension_date }}</p>
+      <p>To receive the GA token(s) you might be holding in your account contact support at support@grandassembly.net within the next 30 days.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Unbounded:wght@500&display=swap');
+
+.join-header{
+    font-family: Verdana;
+    font-size: 2.5rem;
+    max-width: 90vw;
+}
+
+.slogan-header{
+    font-family: Verdana;
+    font-size: 2rem;
+    max-width: 90vw;
+}
+
+.general-text{
+    color: #3d3c3c;
+    font-family: Verdana;
+    max-width: 90vw;
+}
+
+.center-div-join{
+    padding: 15px;
+    margin: auto;
+    position: absolute;
+    top: -550px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+    max-width: 90vw;
+}
+
+.center-div-form{
+    padding: 15px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+    border: 1px solid gray;
+    max-width: 90vw;
+}
+
+.text-form-input{
+    padding:0.8em;
+    width: 450px;
+    border: 1px solid #b4b3b3;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1.5rem;
+    max-width: 80vw;
+}
+
+.text-form-input:hover{
+    border: 1px solid lightblue;
+}
+
+.group{
+  position:relative;
+    max-width: 90vw;
+}
+.group>label{
+  padding:0 0.2em;
+  position:absolute;
+  top:-0.5em;
+  left:1em;
+  background-color:white;
+}
+
+.button-main-register{
+    padding:0.8em;
+    width: 490px;
+    border: 1px solid #b4b3b3;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1.5rem;
+    color: white;
+    background-color: dodgerblue;
+    max-width: 90vw;
+}
+
+.button-main-register:hover{
+    background-color: cornflowerblue;
+}
+i{
+    color: gray;
+}

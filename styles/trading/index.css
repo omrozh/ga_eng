@@ -1,0 +1,231 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+
+html{
+    background-color: dodgerblue;
+    font-family: 'Space Mono', monospace;
+}
+
+body{
+    text-align: center;
+    padding-top: 6%;
+}
+
+h3{
+    color: #848e8f;
+    font-size: 1em;
+    text-align: left;
+}
+
+p{
+    color: #86b6b8;
+    text-align: left;
+    padding-left: 10%;
+}
+
+input{
+    background-color: #f3f8fb;
+    border-radius: 10px;
+    width: 100%;
+    height: 50px;
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+    border-style: none;
+    outline: none;
+    font-size: 1.25em;
+}
+
+input:focus{
+    /*outline: 1px solid #26c2ad;*/
+    box-shadow: 0 0 3pt 2pt dodgerblue;
+
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+.bill-amount{
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 5%;
+}
+
+.people-number{
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 5%;
+}
+
+#splitter-logo{
+    margin: 2%;
+}
+
+#calc-container {
+    width: 50%;
+    height: auto;
+    border-radius: 50px;
+    background-color: white;
+    margin: auto;
+    display: flex;
+}
+
+.bill-side{
+    width: 50%;
+}
+
+.bill{
+    text-align: left;
+    padding: 8%;
+}
+
+.tips{
+    text-align: left;
+    padding-left: 8%;
+    padding-right: 5%;
+}
+
+.tip-percentage{
+    width: 27%;
+    margin: 2%;
+    text-align: center;
+    color: white;
+    background-color: #00474b;
+    font-size: 1.25em;
+}
+
+.tip-percentage:focus{
+    background-color: dodgerblue;
+    color: #00474b;
+}
+
+.people{
+    text-align: left;
+    padding: 8%;
+}
+
+.total-side{
+    width: 50%;
+    margin: 3%;
+    border-radius: 50px;
+    background-color: cornflowerblue;
+}
+
+.tip-amount{
+    padding: 10%;
+}
+
+.total{
+    padding: 10%;
+}
+
+.tip-person{
+    color: white;
+    font-size: 2em;
+    float: right;
+}
+
+.total-person{
+    color: white;
+    font-size: 2em;
+    float: right;
+}
+
+.reset-button{
+    padding: 0%;
+    width: 80%;
+    height: 50px;
+    font-family: 'Space Mono', monospace;
+    border-style: none;
+    outline-style: none;
+    background-color: #26c2ad;
+    font-size: 1.25em;
+    color: #00474b;
+    font-weight: bolder;
+    border-radius: 8px;
+    margin-top: 6%;
+}
+
+.reset-button:hover{
+    background-color: #9fe8df;
+}
+
+@media only screen and (max-width: 1440px){
+    .tip-percentage {
+        width: 26%;
+    }
+
+    .tip-amount {
+        margin-bottom: 10%;
+    }
+    .total {
+        margin-bottom: 10%;
+    }
+
+    .reset-button{
+        margin-bottom: 10%;
+    }
+}
+
+@media only screen and (max-width: 800px){
+    #calc-container{
+        display: block;
+        width: 100%;
+        height: auto;
+        padding-bottom: 1%;
+    }
+
+    .bill-side {
+        width: 100%;
+    }
+
+    .total-side {
+        width: 90%;
+        margin: auto;
+    }
+
+    h3{
+        margin: 2%;
+    }
+
+    .reset-button {
+        margin: 11%;
+    }
+
+    .attribution {
+        margin-top: 5%;
+    }
+
+    .bill{
+        padding: 8%;
+    }
+
+    .tips{
+        padding: 8%;
+    }
+
+    .people{
+        padding: 8%;
+    }
+}
+
+@media only screen and (max-width: 440px){
+    #calc-container{
+        height: auto;
+        padding-bottom: 5%;
+    }
+}
+
+i{
+    color: gray;
+}
