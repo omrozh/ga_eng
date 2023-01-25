@@ -6,22 +6,14 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
     <title>GrandAssembly | The global discussion</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
   <link rel="stylesheet" href="/styles/home/index.css">
   <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
 </head>
 <body style="padding-bottom: 15px">
-    {% if user.is_authenticated %}
-        {% if not user.did_verify_phone_number %}
-        <script>
-           if(confirm("Verify your phone number to receive 5 free GA Tokens.")){
-               window.open("/verify_sms")
-           }
-        </script>
-        {% endif %}
-    {% endif %}
   <div class="header-main" style="z-index: 99">
-      <img src="/static/grandassembly.png" id="assembly-logo" alt="">
-      <span style="float: left; margin-top: 17px">GrandAssembly</span></div>
+      <img src="/static/grandassembly.png" onclick="document.location = '/'" id="assembly-logo" alt="">
+      <span style="float: left; margin-top: 17px" onclick="document.location = '/'">GrandAssembly</span></div>
         <div style="z-index: 9999; position: relative">
             {% if not user.is_authenticated %}
               <i style="font-size: 2rem; position: fixed; right: 15px; top: 8px" onclick="document.location = '/account/login'" class="fa-solid fa-right-to-bracket"></i>
@@ -52,12 +44,6 @@
       </ul>
 
   </div>
-  <center class="news-feed load-more" style="margin-top: 70px; padding-left: 0px; box-shadow: none; border: none; height: fit-content; min-height: 5px; padding-top: 20px; padding-bottom: 20px; margin-bottom: -60px">
-      <input id="search-input" oninput="searchTags()" style="width: 90%; background-color: #eaeaea; color: #888888; padding: 5px; border: 1px solid rgb(220, 220, 220); outline: none; border-radius: 100px; height: 1.5rem; text-indent: 1.5rem;" placeholder="Search for tags or people" type="text">
-      <ul id="search-results">
-
-      </ul>
-  </center>
   <br>
   <br>
   {% if is_authenticated %}
@@ -67,12 +53,39 @@
         <i style="position: fixed; right: 10px; bottom: 30px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
   </div>
   {% endif %}
-  <script>
-      {% if not is_authenticated %}
-        getPostsUnauth()
-      {% else %}
-        getPostsAuth()
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
+      <h1>@{{ tag_name }}</h1>
+      <br>
+      {% if not tag_is_followed %}
+        <button style="height: 50px; padding: 10px" onclick="document.location = '/account/follow/{{ user_info.id }}'" class="button-main-register">Follow This User</button>
+      {% elif tag_is_followed %}
+        <button style="height: 50px; padding: 10px; background-color: darkgrey" onclick="document.location = '/account/unfollow/{{ user_info.id }}'" class="button-main-register">Stop Following This User</button>
       {% endif %}
+  </div>
+  {% for post in posts %}
+    <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
+      <div style="position: relative; top: 20px; float: right; margin-right: 15px">
+          <i onclick="document.location = '/moonvote/{{ post.post_id }}'" style="font-size: 1.5rem; margin-right: 10px" class="fa-solid fa-rocket"></i>
+          <span>{{ post.net_votes }}</span>
+            <i style="margin-left: 10px; font-size: 1.5rem" onclick="document.location = '/hellvote/{{ post.post_id }}'" class="fa-solid fa-fire-flame-simple"></i>
+      </div>
+        <p style="color: gray">@{{ user_info.username }}</p>
+        <h1>{{ post.title }}</h1>
+      <p>{{ post.text_body }}</p>
+    {% if post.has_image %}
+      <img src="{{ post.image_uri }}" style="width: 100%;" alt="">
+    {% endif %}
+      <br>
+      <br>
+      {% for i in comments %}
+          <div style="border: 1px solid #e3e3e3; border-radius: 5px; padding-left: 15px; margin-top: 10px">
+            <p style="color: #888888; font-size: 12px">{{ i.commenter }}</p>
+            <p style="color: black; font-size: 1rem">{{ i.content }}</p>
+          </div>
+      {% endfor %}
+  </div>
+  {% endfor %}
+  <script>
       getTrendingTags()
       getPostsTopPosts()
   </script>

@@ -1,5 +1,7 @@
+window.pagination = 0
+
 function constructPosts(data){
-    if(data.length === 0){
+    if(data.length === 0 && window.pagination === 0){
         let newDiv = ""
         getPostsUnauth()
     }
@@ -15,7 +17,7 @@ function constructPosts(data){
                   <span>${data_temp["net_votes"]}</span>
                     <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-solid fa-fire-flame-simple"></i>
               </div>
-                <p style="color: gray">@${data_temp["creator_username"]}</p>
+                <p style="color: gray" onclick="document.location = '/account/${data["creator_username"]}'">@${data_temp["creator_username"]}</p>
                 <h1>${data_temp["title"]}</h1>
               <p>${data_temp["text_body"]}</p>
               <img src="${data_temp["image_uri"]}" style="width: 100%;" alt="">
@@ -40,14 +42,14 @@ function constructPosts(data){
 function addTags(data){
     let tags_ul = document.getElementById("tags-trending")
     for(let i = 0; i < data.length; i++){
-        tags_ul.innerHTML += `<li onclick="document.location = '/tags/${data[i].replace('#', '')}'">${data[i]}</li>`
+        tags_ul.innerHTML += `<li onclick="document.location = '/tags/${data[i].replace('#', '')}'">${data[i]}</li><br>`
     }
 }
 
 function topHeaders(data){
     let tags_ul = document.getElementById("top-headers")
     for(let i = 0; i < data.length; i++){
-        tags_ul.innerHTML += `<li><a style="color: black" href="/view-post/${data[i]["post_id"]}"><strong>${data[i]["title"]}</strong></a></li>`
+        tags_ul.innerHTML += `<li><a style="color: black" href="/view-post/${data[i]["post_id"]}"><strong>${data[i]["title"]}</strong></a></li><br>`
     }
 }
 
@@ -64,13 +66,20 @@ function getPostsFromTag(tag_name){
 }
 
 function getPostsTopPosts(){
-    fetch('/unauthenticated/load-post-batch')
+    fetch('/top_headers/load-post-batch')
   .then((response) => response.json())
   .then((data) => topHeaders(data));
 }
 
+
 function getPostsAuth(){
-    fetch('/authenticated/load-post-batch/0')
+    window.onscroll = function(ev) {
+        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+            window.pagination += 1
+            getPostsAuth()
+        }
+    };
+    fetch('/authenticated/load-post-batch/' + window.pagination)
   .then((response) => response.json())
   .then((data) => constructPosts(data));
 }
@@ -99,7 +108,12 @@ function searchTags(){
 
 function addSearchTerms(data){
     for(let i = 0; i < data.length; i++){
-        document.getElementById("search-results").innerHTML = `<li onclick="document.location = '/tags/' + '${data[i].replace('#', '')}'">${data[i]}</li>`
+        if(data[i].includes("@")){
+            document.getElementById("search-results").innerHTML = `<li onclick="document.location = '/account/' + '${data[i].replace('@', '')}'">${data[i]}</li>`
+        }
+        else{
+            document.getElementById("search-results").innerHTML = `<li onclick="document.location = '/tags/' + '${data[i].replace('#', '')}'">${data[i]}</li>`
+        }
     }
 }
 

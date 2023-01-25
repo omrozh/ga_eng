@@ -48,7 +48,7 @@
   <br>
   {% if is_authenticated %}
   <div style="width: 100%; position: fixed; bottom: 0; height: 50px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
-        @{{ user.username }}
+        <span>@{{ user.username }}</span>
         <p style="color: gray">{{ user.balance }} GAT</p>
         <i style="position: fixed; right: 10px; bottom: 30px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
   </div>
@@ -59,7 +59,7 @@
           <span>{{ post.net_votes }}</span>
             <i style="margin-left: 10px; font-size: 1.5rem" onclick="document.location = '/hellvote/{{ post.post_id }}'" class="fa-solid fa-fire-flame-simple"></i>
       </div>
-        <p style="color: gray">@{{ post.creator_username }}</p>
+        <p style="color: gray" onclick="document.location = '/account/{{ post.creator_username }}'">@{{ post.creator_username }}</p>
         <h1>{{ post.title }}</h1>
       <p>{{ post.text_body }}</p>
     {% if post.has_image %}
