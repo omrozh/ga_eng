@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ election.election_title }}</title>
+    <link rel="stylesheet" href="/styles/home/index.css">
+</head>
+<body>
+  <div class="news-feed load-more">
+    <h1>{{ election.election_title }}</h1>
+    <p>{{ election.type }}</p>
+    <p style="color: gray">Start: {{ election.election_start_date }} - Results: {{ election.election_end_date }}</p>
+    <br>
+    <p style="color: gray">{{ election.election_context }}</p>
+  </div>
+  <div class="news-feed load-more">
+    <h1>Candidates</h1>
+    {% for i in candidates %}
+    <hr>
+      <p>@{{ i.user_fk }}</p> <a href="/cast_vote/{{ i.user_fk }}">Vote</a>
+    <hr>
+    {% endfor %}
+  </div>
+</body>
+</html>

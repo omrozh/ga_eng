@@ -59,7 +59,7 @@ function getPostsUnauth(){
   .then((data) => constructPosts(data));
 }
 
-function getPostsFromTag(tag_name){
+function (tag_name){
     fetch('/view-tag/' + tag_name)
   .then((response) => response.json())
   .then((data) => constructPosts(data));

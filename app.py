@@ -12,7 +12,7 @@ import requests
 
 app = flask.Flask(__name__)
 
-app.config["SECRET_KEY"] = ""
+app.config["SECRET_KEY"] = "8ujs-fjeud-jdv&e3-fgeu3id-3jfsu2tf+!0"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 
 db = SQLAlchemy(app=app)
@@ -23,9 +23,9 @@ bcrypt = Bcrypt(app)
 
 class Supply(db.Model):
     id = db.Column(db.String, primary_key=True)
-    total_supply = db.Column(db.Integer, default=1000000000)
-    remaining_supply = db.Column(db.Integer, default=1000000000)
-    price_per_coin = db.Column(db.Float, default=0.05)
+    total_supply = db.Column(db.Integer, default=10000000000)
+    remaining_supply = db.Column(db.Integer, default=10000000000)
+    price_per_coin = db.Column(db.Float, default=0.005)
 
 
 class User(db.Model, UserMixin):
@@ -37,6 +37,7 @@ class User(db.Model, UserMixin):
     balance = db.Column(db.Integer, default=0)
     phone_number = db.Column(db.String)
     did_verify_phone_number = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean)
 
 
 class Post(db.Model):
@@ -128,9 +129,45 @@ class ReceiveOut(db.Model):
     payment_instructions = db.Column(db.String)
 
 
+class Election(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    type = db.Column(db.String)
+    election_start_date = db.Column(db.Date)
+    election_end_date = db.Column(db.Date)
+    election_title = db.Column(db.String)
+    election_context = db.Column(db.String)
+
+
+class Committee(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    election_fk = db.Column(db.String)
+    term_ending = db.Column(db.Date)
+
+
+class Representative(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    active_work = db.Column(db.Boolean)
+    committee_fk = db.Column(db.String)
+    user_fk = db.Column(db.String)
+    photo_uri = db.Column(db.String)
+
+
+class RepresentativeCandidate(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    election_fk = db.Column(db.String)
+    user_fk = db.Column(db.String)
+    total_votes = db.Column(db.Integer)
+
+
+class FollowUser(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    followed_fk = db.Column(db.String)
+    follower_fk = db.Column(db.String)
+
+
 def get_coin_price():
     supply = Supply.query.first()
-    return (supply.total_supply * 0.05) / supply.remaining_supply
+    return (supply.total_supply * 0.005) / supply.remaining_supply
 
 
 @login_manager.user_loader
@@ -138,9 +175,111 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
+@app.route("/admin", methods=["POST", "GET"])
+@login_required
+def admin():
+    if not current_user.is_admin:
+        return "You do not have the required permissions to view this page."
+    return flask.render_template("admin/admin.html", elections=Election.query.all())
+
+
+@app.route("/admin/issue-suspension", methods=["POST", "GET"])
+@login_required
+def admin_suspend():
+    if not current_user.is_admin:
+        return "You do not have the required permissions to view this page."
+    if flask.request.method == "POST":
+        new_suspension = SuspendedAccount(id=str(uuid4()), reason_of_suspension=flask.request.values["reason"],
+                                          suspended_account_fk=flask.request.values["username"],
+                                          suspension_date=datetime.today())
+        db.session.add(new_suspension)
+        db.session.commit()
+    return flask.render_template("admin/suspend_user.html")
+
+
+@app.route("/cast_vote/<username>")
+@login_required
+def cast_vote(username):
+
+    candidate = RepresentativeCandidate.query.filter_by(user_fk=username).first()
+    candidate.total_votes += 1
+    current_user.balance -= 10
+    db.session.commit()
+
+    return flask.redirect("/")
+
+
+@app.route("/election/<election_id>")
+def election(election_id):
+    candidates = RepresentativeCandidate.query.filter_by(election_fk=election_id).all()
+    return flask.render_template("election.html", election=Election.query.get(election_id), candidates=candidates)
+
+
+@app.route("/admin/create-election", methods=["POST", "GET"])
+@login_required
+def create_election():
+    if not current_user.is_admin:
+        return "You do not have the required permissions to view this page."
+    if flask.request.method == "POST":
+        values = flask.request.values
+        new_election = Election(
+            id=str(uuid4()), type=values["type"],
+            election_start_date=datetime.today().date() + timedelta(
+                days=int(values["campaign_time"])),
+            election_end_date=datetime.today().date() + timedelta(
+                days=int(values["campaign_time"]) + 7),
+            election_title=values["title"],
+            election_context=values["context"]
+        )
+
+        new_post_elect = Post(id=str(uuid4()), creator_fk=current_user.id, title=values["title"],
+                              text_body=values["context"],
+                              post_date=datetime.today(), tags="#elections")
+        db.session.add(new_post_elect)
+
+        db.session.add(new_election)
+        db.session.commit()
+
+        return flask.redirect("/admin")
+    return flask.render_template("admin/create_election.html")
+
+
 @app.route("/")
 def index():
     return flask.render_template("index.html", is_authenticated=current_user.is_authenticated, user=current_user)
+
+
+@app.route("/account/<username>")
+def account_view(username):
+    user_info = User.query.filter_by(username=username).first()
+    posts = Post.query.filter_by(creator_fk=user_info.id).all()
+    tag_is_followed = user_info.id in [i.followed_fk for i in
+                                       FollowUser.query.filter_by(follower_fk=current_user.id).all()]
+
+    number_of_subs = len(FollowUser.query.filter_by(followed_fk=user_info.id).all())
+
+    return flask.render_template("posts/user_view.html", tag_name=username, user=current_user, posts=posts,
+                                 is_authenticated=current_user.is_authenticated, tag_is_followed=tag_is_followed,
+                                 user_info=user_info, number_of_subs=number_of_subs)
+
+
+@app.route("/account/follow/<user_id>")
+@login_required
+def follow_user(user_id):
+    if FollowUser.query.filter_by(followed_fk=user_id, follower_fk=current_user.id).first():
+        return flask.redirect("/")
+    new_follow = FollowUser(id=str(uuid4()), followed_fk=user_id, follower_fk=current_user.id)
+    db.session.add(new_follow)
+    db.session.commit()
+    return flask.redirect("/account/" + User.query.get(user_id).username)
+
+
+@app.route("/account/unfollow/<user_id>")
+@login_required
+def unfollow_user(user_id):
+    db.session.delete(FollowUser.query.filter_by(followed_fk=user_id, follower_fk=current_user.id).first())
+    db.session.commit()
+    return flask.redirect("/account/" + User.query.get(user_id).username)
 
 
 @app.route("/account/suspended")
@@ -156,7 +295,7 @@ def before_request():
         suspension = SuspendedAccount.query.filter_by(suspended_account_fk=current_user.username).first()
         if suspension:
             if "/account/suspended" not in str(flask.request.url_rule):
-                    return flask.redirect("/account/suspended")
+                return flask.redirect("/account/suspended")
 
 
 @app.route("/post/register", methods=["POST", "GET"])
@@ -221,7 +360,40 @@ def static_host(filename):
 
 @app.route("/unauthenticated/load-post-batch")
 def load_post_batch_unauthenticated():
+    allowed_dates = []
+    current_dt = datetime.today().date()
+
+    while current_dt > datetime.today().date() - timedelta(days=14):
+        allowed_dates.append(current_dt)
+        current_dt = current_dt - timedelta(days=1)
+
     top_posts = Post.query.order_by(Post.net_votes.desc()).all()[:50]
+    admins = User.query.filter_by(is_admin=True).all()
+
+    for i in admins:
+        temp_adm_post = Post.query.filter_by(creator_fk=i.id).all()
+        for c in temp_adm_post:
+            if c.post_date in allowed_dates:
+                top_posts.insert(0, c)
+
+    all_top_posts = [
+        {
+            "title": i.title,
+            "text_body": i.text_body,
+            "has_image": True if i.image_uri else False,
+            "image_uri": i.image_uri,
+            "creator_username": User.query.get(i.creator_fk).username,
+            "net_votes": i.net_votes,
+            "post_id": i.id
+        } for i in top_posts
+    ]
+
+    return flask.jsonify(all_top_posts)
+
+
+@app.route("/top_headers/load-post-batch")
+def load_post_batch_headers():
+    top_posts = Post.query.order_by(Post.net_votes.desc()).all()[:10]
     all_top_posts = [
         {
             "title": i.title,
@@ -243,7 +415,25 @@ def load_post_batch_authenticated(paginate):
 
     follow_posts = []
 
-    for i in Post.query.order_by(Post.post_date.desc()).all():
+    user_follows = FollowUser.query.filter_by(follower_fk=current_user.id).all()
+
+    allowed_dates = []
+    allowed_posts = []
+
+    current_date = datetime.today().date()
+
+    while current_date > datetime.today().date() - timedelta(days=14):
+        allowed_dates.append(current_date)
+        current_date = current_date - timedelta(days=1)
+
+    for i in allowed_dates:
+        for c in Post.query.filter_by(post_date=i):
+            allowed_posts.append(c)
+
+    for i in allowed_posts:
+        for c in user_follows:
+            if c.followed_fk == i.creator_fk:
+                follow_posts.append(i)
         for c in follows:
             if "#" + c in i.tags.split("&&"):
                 follow_posts.append(i)
@@ -252,6 +442,14 @@ def load_post_batch_authenticated(paginate):
     follow_posts = list(follow_posts)
 
     follow_posts.sort(key=lambda x: x.net_votes, reverse=True)
+
+    admins = User.query.filter_by(is_admin=True).all()
+
+    for i in admins:
+        temp_adm_post = Post.query.filter_by(creator_fk=i.id).all()
+        for c in temp_adm_post:
+            if c.post_date in allowed_dates:
+                follow_posts.insert(0, c)
 
     all_top_posts = [
         {
@@ -262,7 +460,7 @@ def load_post_batch_authenticated(paginate):
             "creator_username": User.query.get(i.creator_fk).username,
             "net_votes": i.net_votes,
             "post_id": i.id
-        } for i in follow_posts[int(paginate):int(paginate) + 50]
+        } for i in follow_posts[int(paginate*10):int(paginate) + 10]
     ]
 
     return flask.jsonify(all_top_posts)
@@ -276,7 +474,7 @@ def new_post():
             return '''
                 <script>
                     alert('Insufficient account balance')
-                    document.location = '/buy/token'
+                    document.location = '/trading/buy'
                 <script>
             '''
 
@@ -306,8 +504,8 @@ def new_post():
                             image_uri=str("/file_content/" + save_image_uuid) if len(image.filename) > 2 else None,
                             tags="&&".join(set(get_tags)), post_date=datetime.today())
 
-        current_user.balance -= 2
-        Supply.query.first().price_per_coin += 2
+        current_user.balance -= 20
+        Supply.query.first().remaining_supply += 20
 
         db.session.add(new_post_add)
         db.session.commit()
@@ -349,16 +547,16 @@ def moonvote(post_id):
         return '''
             <script>
                 alert("Insufficient account balance")
-                document.location = '/buy/token'
+                document.location = '/trading/buy'
             </script>
         '''
 
     new_moonvote = MoonVote(id=str(uuid4()), post_fk=post_id, voter_fk=current_user.id)
     Post.query.get(post_id).net_votes += 1
 
-    current_user.balance -= 1
+    current_user.balance -= 10
     if not current_user.id == User.query.get(Post.query.get(post_id).creator_fk).id:
-        User.query.get(Post.query.get(post_id).creator_fk).balance += 1
+        User.query.get(Post.query.get(post_id).creator_fk).balance += 8
 
     db.session.add(new_moonvote)
     db.session.commit()
@@ -376,6 +574,8 @@ def view_tag(tag):
                 posts_in_tag.append(i)
         else:
             break
+
+    posts_in_tag.sort(key=lambda x: x.net_votes, reverse=True)
 
     all_top_posts = [
         {
@@ -400,7 +600,11 @@ def view_tag_ui(tag_name):
 
 @app.route("/tags/search/<search_term>")
 def tags_search(search_term):
-    return flask.jsonify([i.tag_name for i in Tag.query.filter(Tag.tag_name.like("%" + search_term + "%")).all()])
+    tag_search = [i.tag_name for i in Tag.query.filter(Tag.tag_name.like("%" + search_term + "%")).all()]
+    similar_users = ["@" + i.username for i in User.query.filter(User.username.like("%" + search_term + "%")).all()]
+    for i in similar_users:
+        tag_search.append(i)
+    return flask.jsonify(tag_search)
 
 
 @app.route("/follow-tag/<tag_name>")
@@ -432,14 +636,14 @@ def hellvote(post_id):
         return '''
             <script>
                 alert("Insufficient account balance")
-                document.location = '/buy/token'
+                document.location = '/trading/buy'
             </script>
         '''
 
     new_hellvote = HellVote(id=str(uuid4()), post_fk=post_id, voter_fk=current_user.id)
     Post.query.get(post_id).net_votes -= 1
 
-    current_user.balance -= 1
+    current_user.balance -= 10
 
     db.session.add(new_hellvote)
     db.session.commit()
@@ -482,13 +686,15 @@ def file_content(filename):
 @login_required
 def verify_sms():
     if flask.request.method == "POST":
+        if current_user.did_verify_phone_number:
+            return flask.redirect("/")
         authentication_code = AuthenticationSMS.query.filter_by(user_fk=current_user.id).first().sms_code
         if authentication_code == flask.request.values["sms_code"]:
             current_user.did_verify_phone_number = True
-            current_user.balance += 5
+            current_user.balance += 50
 
             supply = Supply.query.first()
-            supply.total_supply += 5
+            supply.total_supply += 50
 
             db.session.commit()
         return flask.redirect("/")
@@ -529,13 +735,13 @@ def buy_token():
             "exp_year": int(values["date"].split("/")[1])
         }
         token_id = create_token(card_info).get("id")
-        charge = create_charge(token_id=token_id, amount=get_coin_price()*int(values["coin_amount"]))
+        charge = create_charge(token_id=token_id, amount=get_coin_price() * int(values["coin_amount"]))
 
         current_user.balance += int(values["coin_amount"])
         db.session.commit()
 
         return flask.redirect("/")
-    return flask.render_template("trading/buy_token.html", token_price=get_coin_price())
+    return flask.render_template("trading/buy_token.html", token_price=round(get_coin_price(), 5))
 
 
 @app.route("/trading/sell", methods=["POST", "GET"])

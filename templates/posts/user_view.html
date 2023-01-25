@@ -55,6 +55,7 @@
   {% endif %}
   <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
       <h1>@{{ tag_name }}</h1>
+      <p style="color: gray">Number of followers: {{ number_of_subs }}</p>
       <br>
       {% if not tag_is_followed %}
         <button style="height: 50px; padding: 10px" onclick="document.location = '/account/follow/{{ user_info.id }}'" class="button-main-register">Follow This User</button>

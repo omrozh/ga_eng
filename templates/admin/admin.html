@@ -26,6 +26,9 @@
     <a style="color: #1b2f39" href="/admin/manage-elections">
       Manage Elections
     </a>
+    {% for i in elections %}
+      <p>{{ i.id }} | {{ i.election_title }}</p>
+    {% endfor %}
   </div>
 </body>
 </html>
