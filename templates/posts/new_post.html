@@ -5,31 +5,288 @@
     <title>GrandAssembly</title>
   <link rel="stylesheet" href="/styles/home/index.css">
   <link rel="stylesheet" href="/styles/forms/index.css">
+  <link rel="stylesheet" href="/styles/account/index.css">
+  <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+  <style>
+    .checkbox-rect input[type="checkbox"] {
+      display: none;
+    }
+    .label-upload {
+      background-color: dodgerblue;
+      color: white;
+      padding: 0.5rem;
+      font-family: sans-serif;
+      border-radius: 0.3rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .checkbox-rect input[type="checkbox"] + label {
+      border-bottom: 3px solid dodgerblue;
+    }
+    .checkbox-rect input[type="checkbox"]:hover + label:hover {
+      color: white;
+    }
+    .checkbox-rect input[type="checkbox"]:hover + label:before {
+      background: #50565a;
+      box-shadow: inset 0px 0px 0px 2px #f7f2f2;
+    }
+    .checkbox-rect input[type="checkbox"] + label:last-child {
+      margin-bottom: 0;
+    }
+    .checkbox-rect input[type="checkbox"]:checked + label:before {
+      width: 1.3em;
+      height: 1.3em;
+      border-radius: 0.2em;
+      border: 2px solid #fff;
+      -webkit-transform: rotate(90deg);
+      transform: rotate(90deg);
+      background: #50565a;
+      box-shadow: 0 0 0 1px #000;
+    }
+    .check-div{
+      float: left;
+      margin-left: 100px
+    }
+    @media only screen and (max-width: 1000px) {
+      #ai-rewrite{
+        display: none;
+      }
+      .check-div{
+        margin-left: 0;
+      }
+    }
+  </style>
 </head>
   <body>
+  <button type="button" id="ai-rewrite" style="float: right; background-color: dodgerblue; border: none; outline: none; color: white; padding: 10px; position:fixed; bottom: 50px; right: 50px" onclick="aiAssist()">Yapay Zekaya Yazdır</button>
   <div class="header-main">
       <img src="/static/grandassembly.png" style="margin-left: 5vw" id="assembly-logo" alt="">
-      <span style="float: left; margin-top: 17px" onclick="document.location = '/'">GrandAssembly</span></div>
+      <span style="float: left; margin-top: 14px" onclick="document.location = '/'">GrandAssembly</span></div>
   <div id="wrapper">
     <div id="header" style="background-color: dodgerblue" class="noselect">
         Post
     </div>
     <form id="content" method="post" enctype="multipart/form-data">
-      <input id="title" name="title" type="text" placeholder="Your title here...">
-      <textarea name="text_body" placeholder="Post body here..." id="editor" style="width: 100%; outline: none; resize: none; padding: 5px; font-family: Verdana"></textarea>
+      <input oninput="window.active_elem = this;" id="title" name="title" style="font-size: 14px" type="text" placeholder="Başlık">
+      <textarea oninput="window.active_elem = this;" name="text_body" placeholder="İçerik" id="editor" style="width: 100%; outline: none; resize: none; padding: 5px; font-family: Verdana; font-size: 12px"></textarea>
       <br>
-      <p style="margin-top: 15px; color: white">Post Image</p>
-      <input style="margin-top: 15px" type="file" name="image_file">
+      <p style="margin-top: 15px; color: white">Video veya Görsel Yükle - 20MB Dosya Boyut Limiti</p>
+      <label for="main-picture" class="label-upload" style="color: white">İçeriğe Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" name="image_file" type="file" id="main-picture" hidden>
       <br>
+      <div>
+        <div class="item">
+        <div style="float: left">
+          <div class="checkbox-rect">
+          <input type="checkbox" id="checkbox-rect1" name="add_test">
+          <label onclick="addTest()" for="checkbox-rect1" style="margin-top: 25px; color: white">Test Ekle</label>
+        </div>
+        </div>
+        <div class="check-div">
+          <div class="checkbox-rect">
+          <input type="checkbox" id="checkbox-id-2" name="add_test">
+          <label onclick="addTestInteractive()" for="checkbox-id-2" style="margin-top: 25px; color: white">İnteraktif İçerik Ekle</label>
+          </div>
+        </div>
+          <div class="check-div">
+            <div class="checkbox-rect">
+              <input type="checkbox" id="checkbox-id-3" name="add_poll">
+              <label onclick="addPoll()" for="checkbox-id-3" style="margin-top: 25px; color: white">Anket Ekle</label>
+            </div>
+          </div>
+          <div class="check-div">
+            <div class="checkbox-rect">
+              <input type="checkbox" id="checkbox-id-4" name="add_tok_poll">
+              <label onclick="addPoll()" for="checkbox-id-4" style="margin-top: 25px; color: white">Tokenli Anket Ekle</label>
+            </div>
+          </div>
+          <br style="clear: both">
+          <br>
+
+          <div id="test-settings" style="display:none;">
+            <div id="insert-questions-div">
+            </div>
+            <br>
+            <div id="outcomes">
+
+            </div>
+            <br>
+            <button type="button" onclick="createQuestion()" class="btn btn-primary" id="question-add-button" style="background-color: dodgerblue">Soru Ekle</button><button type="button" onclick="addOutcome()" class="btn btn-primary" style="background-color: dodgerblue; margin-left: 15px" id="out-btn">Sonuç Ekle</button><button type="button" onclick="window.location.reload()" class="btn btn-primary" style="background-color: #dc0000; margin-left: 15px">Sıfırla</button>
+            <br>
+            <input type="text" style="display: none" name="outcomes_and_points" id="outcomes_and_points">
+            <input type="text" style="display: none" name="questions" id="questions">
+          </div>
+    </div>
+      </div>
       <div id="footer">
         <div id="footer-left">
-          <input class="btn btn-primary" style="background-color: dodgerblue" value="Post" type="submit">
+          <input class="btn btn-primary" style="background-color: dodgerblue" value="Paylaş" onclick="saveTest()" type="button">
         </div>
         <div id="footer-right">
-          <p style="color: red">Warning: This action will cost you 2 Tokens!</p>
+          <p style="color: red">Uyarı: Post atmak 20 tokene mal olur.</p>
         </div>
       </div>
     </form>
   </div>
+  <script>
+      window.active_elem = document.getElementById("editor")
+      function aiAssist(){
+        let current_editor = window.active_elem
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", '/ai/assist', true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            if(xhr.responseText === "Failed"){
+              let ok = confirm("Bu özelliği kullanmaya henüz elverişli değilsiniz")
+              if(ok){
+                window.open("/ai/waitinglist")
+              }
+            }else{
+              if(current_editor.id === "editor"){
+                current_editor.value = prev_val + "\n" + xhr.responseText;
+              }
+              else{
+                current_editor.value = xhr.responseText;
+              }
+            }
+          }
+          else{
+            current_editor.value = "Yapay Zeka Şu Anda Çok Yoğun  - Tekrar Dene\n" + prev_val
+          }
+        }
+        xhr.send("content=" + current_editor.value);
+        let prev_val = current_editor.value
+        current_editor.value = "Lütfen Bekleyin..."
+      }
+      function addTestInteractive(){
+          if(document.getElementById("test-settings").style.display === "block"){
+            document.getElementById("test-settings").style.display = "none"
+          }
+          else{
+            document.getElementById("test-settings").style.display = "block"
+          }
+          document.getElementById("out-btn").style.display = "none";
+          document.getElementById("question-add-button").onclick = createQuestionInteractive;
+          document.getElementById("question-add-button").innerText = "Segment Ekle";
+        }
+      function addQ(index_cr) {
+        let field = document.getElementsByName(`text-answer-val-a-q-${index_cr}`);
+        setTimeout(function () {
+          for (let i = 0; i < field.length; i++) {
+            if (!field[i].value.includes('q:')) {
+              field[i].value = "q:" + field[i].value.replace("q", "").replace(":", "");
+            }
+          }
+        }, 1);
+      }
+      window.question_index = 0
+      function addOptionInteractive(index_cr){
+        let option = `<input class="text-form-input"  oninput="window.active_elem = this;" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 20%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Sonraki Soru No" name="text-answer-val-a-q-${index_cr}"><br><br>`
+        let new_option = document.createElement("div")
+        new_option.oninput = function(e) {
+          let field=document.getElementsByName(`text-answer-val-a-q-${index_cr}`);
+          setTimeout(function () {
+            for(let i = 0; i < field.length; i++) {
+              if (!field[i].value.includes('q:')) {
+                field[i].value = "q:" + field[i].value.replace("q", "").replace(":", "");
+              }
+            }
+          }, 1);
+        }
+        new_option.innerHTML = option
+        document.getElementById("options-" + index_cr).appendChild(new_option)
+      }
+      window.outcome_index = 0
+      function createQuestionInteractive(){
+        window.question_index += 1
+        let question = `<div id="question-${window.question_index}"><input  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input"  oninput="window.active_elem = this;" style="width: 80%; margin-top: 50px" placeholder="${window.question_index}) Segment"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Segmente Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" oninput="window.active_elem = this;" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 20%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Sonraki No" oninput="addQ(${window.question_index})" name="text-answer-val-a-q-${window.question_index}"><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOptionInteractive(${window.question_index})">Şık Ekle</button><div>`
+        let new_question = document.createElement("div")
+        new_question.innerHTML = question
+        document.getElementById("insert-questions-div").appendChild(new_question)
+      }
+  </script>
+  <script>
+            function addTest(){
+              if(document.getElementById("test-settings").style.display === "block"){
+                document.getElementById("test-settings").style.display = "none"
+              }
+              else{
+                document.getElementById("test-settings").style.display = "block"
+              }
+
+            document.getElementById("out-btn").style.display = "";
+            document.getElementById("question-add-button").onclick = createQuestion;
+            }
+            function addPoll(){
+              addTest()
+              document.getElementById("out-btn").style.display = "none";
+              document.getElementById("question-add-button").onclick = createQuestionPoll;
+            }
+            window.question_index = 0
+            function createQuestionPoll(){
+              window.question_index += 1
+              let question = `<div id="question-${window.question_index}"><input oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input" style="width: 80%; margin-top: 50px" placeholder="Soru"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Soruya Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px" type="text" oninput="window.active_elem = this;" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" type="text" placeholder="Puanı" value="1" name="text-answer-val-a-q-${window.question_index}"><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOptionPoll(${window.question_index})">Şık Ekle</button><div>`
+              let new_question = document.createElement("div")
+              new_question.innerHTML = question
+              document.getElementById("out-btn").style.display = "none"
+              document.getElementById("insert-questions-div").appendChild(new_question)
+            }
+            function addOptionPoll(index_cr){
+              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" value="1" type="text" placeholder="Puanı" name="text-answer-val-a-q-${index_cr}"><br><br>`
+              let new_option = document.createElement("div")
+              new_option.innerHTML = option
+              document.getElementById("options-" + index_cr).appendChild(new_option)
+            }
+            function addOption(index_cr){
+              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Puanı" name="text-answer-val-a-q-${index_cr}"><button style="margin-left: 15px; background-color: limegreen; color: white" type="button" class="btn btn-primary" onclick="makeRightAnswer(this, 'text-answer-val-a-q-${window.question_index}')">Doğru Cevap (Opsiyonel)</button><br><br>`
+              let new_option = document.createElement("div")
+              new_option.innerHTML = option
+              document.getElementById("options-" + index_cr).appendChild(new_option)
+            }
+            window.outcome_index = 0
+            function addOutcome(){
+              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="Çıkması İstenen Sonuç" name="outcome" id="outcome-${window.outcome_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Puanı" id="outcome-point-${window.outcome_index}"><br><br>`
+              window.outcome_index += 1
+              let new_option = document.createElement("div")
+              new_option.innerHTML = option
+              document.getElementById("outcomes").appendChild(new_option)
+            }
+            function makeRightAnswer(element, question_index){
+              let all_elems = document.getElementsByName(question_index);
+              for(let i = 0; i < all_elems.length; i++){
+                all_elems[i].value = "Y";
+              }
+              element.previousSibling.value = "D";
+            }
+            function createQuestion(){
+              window.question_index += 1
+              let question = `<div id="question-${window.question_index}"><input oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input" style="width: 80%; margin-top: 50px" placeholder="Soru"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Soruya Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px" type="text" oninput="window.active_elem = this;" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Puanı" name="text-answer-val-a-q-${window.question_index}"><button style="margin-left: 15px; background-color: limegreen; color: white" type="button" class="btn btn-primary" onclick="makeRightAnswer(this, 'text-answer-val-a-q-${window.question_index}')">Doğru Cevap (Opsiyonel)</button><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOption(${window.question_index})">Şık Ekle</button><div>`
+              let new_question = document.createElement("div")
+              new_question.innerHTML = question
+              document.getElementById("insert-questions-div").appendChild(new_question)
+            }
+            function saveTest(){
+              document.getElementById("questions").value = ""
+              let questions = document.getElementsByName("question_add")
+              for(let i = 0; i < questions.length; i++){
+                let question_index = questions[i].id.split("-")[1]
+                let choice = ""
+                document.getElementById(`file-a-q-${question_index}`).setAttribute("name", questions[i].value)
+                let choice_elems = document.getElementsByName("text-answer-a-q-" + question_index)
+                let choice_val_elems = document.getElementsByName("text-answer-val-a-q-" + question_index)
+                for (let c = 0; c < choice_elems.length; c++){
+                  choice += choice_elems[c].value + "##" + choice_val_elems[c].value + "&&"
+                }
+                let outcomes = document.getElementsByName("outcome")
+                for(let j = 0; j < outcomes.length; j++){
+                  document.getElementById("outcomes_and_points").value += document.getElementById("outcome-" + j).value + "&&" + document.getElementById("outcome-point-" + j).value + "&&&"
+                }
+                document.getElementById("questions").value += questions[i].value + "&&&" + choice + "&&"
+              }
+              document.getElementsByTagName("form")[0].submit()
+            }
+          </script>
 </body>
 </html>

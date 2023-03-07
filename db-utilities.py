@@ -1,4 +1,4 @@
-from app import db, app, Supply, SuspendedAccount
+from app import db, app, Supply, SuspendedAccount, User, bcrypt
 from sys import argv
 from uuid import uuid4
 from datetime import datetime
@@ -32,5 +32,14 @@ with app.app_context():
 
     elif argv[1] == "remove-suspension":
         db.session.delete(SuspendedAccount.query.filter_by(suspended_account_fk=argv[2]).first())
+        db.session.commit()
+
+    elif argv[1] == "make-admin":
+        User.query.filter_by(username=argv[2]).first().is_admin = True
+        db.session.commit()
+
+    elif argv[1] == "change-username":
+        User.query.filter_by(username=argv[2]).first().password = bcrypt.generate_password_hash(argv[3])
+        User.query.filter_by(username=argv[2]).first().username = argv[3]
         db.session.commit()
 

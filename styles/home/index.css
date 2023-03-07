@@ -1,31 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Unbounded:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
 body {
-  	background: #e9eaed;
+  	background: white;
 	margin: 0;
 	padding: 0;
-	font-family: Verdana;
+	font-family: "Open Sans";
+}
+
+#top-headers{
+	width: 80%;
 }
 
 .news-feed {
-  	width: 750px;
-  	min-height: 250px;
-  	background: #FFF;
-  	margin: 10px auto 0;
-  	padding: 10px;
-  	border: 1px solid;
-  	border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-	box-shadow: 1px 0 5px -2px #888;
+	width: 600px;
+	min-height: 250px;
+	background: #FFF;
+	margin: 10px auto 0;
+	padding: 10px;
+	border-top: 1px solid rgb(220, 220, 220)
 }
 
 .side-menu {
-	width: 20vw;
+	width: 25vw;
 	position: fixed;
 	height: 100vh;
 	background-color: white;
 	top: 0;
 	border-right: 1px solid rgb(220, 220, 220);
 	z-index: 999;
+	overflow-y: auto;
 }
 
 .header-main{
@@ -40,15 +43,16 @@ body {
 
 #assembly-logo{
 	width: 50px;
-	margin-left: 21vw;
-	float: left
+	margin-left: 26vw;
+	float: left;
+	margin-bottom: 20px;
 }
 
 #bottom-menu{
 	display: none;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1250px) {
 	.header-main{
 		width: 100vw;
 	}
@@ -71,13 +75,16 @@ li{
 	margin-top: 5px;
 }
 
-.fa-rocket:hover{
+.fa-face-smile:hover{
 	color: dodgerblue;
 }
-.fa-fire-flame-simple:hover{
+.fa-face-frown:hover{
 	color: coral;
 }
 
 i{
 	color: gray;
+}
+li:hover{
+	 cursor: pointer;
 }

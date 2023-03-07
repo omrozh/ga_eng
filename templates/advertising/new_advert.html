@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>
+    if(window.innerWidth < window.innerHeight){
+      alert("Please use a desktop device for advertising console")
+      document.location = "/"
+    }
+  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GrandAssembly for Business</title>
+    <script src="/scripts/home/utils.js"></script>
+    <link rel="stylesheet" href="/styles/account/index.css">
+    <link rel="stylesheet" href="/styles/home/index.css">
+    <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
+    <style>
+      .remove-creator:hover{
+        text-decoration: line-through;
+      }
+      .people-number{
+            background-color: #f3f8fb;
+            border-radius: 10px;
+            width: 100%;
+            height: 50px;
+            text-align: right;
+            font-family: 'Space Mono', monospace;
+            border-style: none;
+            outline: none;
+            font-size: 1.25em;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+
+      input[type=number] {
+          -moz-appearance:textfield; /* Firefox */
+      }
+
+    </style>
+</head>
+<body>
+  <img src="/static/grandassembly.png" style="width: 50px; margin-top: 50px; margin-left: 50px" alt="">
+  <h1 style="margin-left: 50px; margin-bottom: 50px">Kampanya Oluştur</h1>
+  <form method="post" enctype="multipart/form-data">
+    <div class="news-feed load-more">
+      <h1>Öne Çıkartılacak İçerik</h1>
+      <h2>{{ post.title }}</h2>
+      <p id="post_body">{{ post.text_body }}</p>
+    </div>
+    <div class="news-feed load-more">
+      <h1>Bütçe</h1>
+      <input type="number" name="total_budget" class="text-form-input" placeholder="Toplam Kampanya Bütçesi (₺), 50 min.">
+      <br>
+      <input type="number" name="bid_target" style="margin-top: 15px" class="text-form-input" placeholder="Hedef BGBM">
+      <p>Tavsiye Edilen: 20.00₺ / Minimum: 10.00₺</p>
+    </div>
+    <div class="news-feed load-more">
+      <h1>Hedefleme</h1>
+      <p>Hedef kitlenizin takip edebileceği GrandAssembly hesapları</p>
+      <input oninput="adSearch()" id="search-input" type="text" class="text-form-input" placeholder="GA Kullanıcı Adı">
+      <input type="text" id="creators-alike" name="creators_alike" style="display: none">
+      <div id="search-results"></div>
+      <div>
+        <h2>Eklenen İçerik Üreticiler</h2>
+        <ul id="selected-creators">
+
+        </ul>
+      </div>
+    </div>
+    <div class="news-feed load-more" style="display: none">
+      <h1>Reklam Türü</h1>
+      <select class="text-form-input" name="advert_type">
+        <option value="">In Highlights</option>
+        <option value="">Sponsored Tags</option>
+        <option value="">Post</option>
+      </select>
+    </div>
+    <div class="news-feed load-more">
+      <h1>Ödeme Bilgileri</h1>
+      <div class="tip amounts">
+        <input  type="number" name="card_number" class="people-number" placeholder="Card Number" style="text-align: left; text-indent: 1rem; width: 99%" onchange="calc()">
+        <input  type="text" name="date" class="people-number" placeholder="Date XX/XX" style="text-align: left; text-indent: 1rem; width: 49%; margin-top: 15px">
+        <input  type="number" name="cvc" class="people-number" placeholder="CVC" style="text-align: left; text-indent: 1rem; width: 49%; margin-top: 15px">
+      </div>
+    </div>
+    <div class="news-feed load-more">
+      <h1>Yayınla</h1>
+      <button class="button-main-register">Yayınla</button>
+      <p>Her günün sonunda, reklamınızın performansı ile ilgili bir rapor mail adresinize gönderilecektir.</p>
+    </div>
+  </form>
+  <br>
+  <br>
+  <script>
+      let text_data  = document.getElementById("post_body")
+      let supposed_data = "{{ post.text_body }}".replaceAll("&amp;newline&amp;", "<br>")
+      for(let i = 0; i < supposed_data.split(" ").length; i++){
+          if(supposed_data.split(" ")[i].substring(0, 4) === "http" && supposed_data.split(" ")[i].length > 10){
+              let ext_link = supposed_data.split(" ")[i]
+              supposed_data = supposed_data.replace(supposed_data.split(" ")[i], `<a style="color: dodgerblue" href='${ext_link}'>${ext_link}</a>`)
+          }
+          if(supposed_data.split(" ")[i].charCodeAt(0) === 35){
+              let tag_real = supposed_data.split(" ")[i].replace("#", "")
+              supposed_data = supposed_data.replace(supposed_data.split(" ")[i], `<a style="color: dodgerblue" href='/tags/${tag_real}'>#${tag_real}</a>`)
+          }
+      }
+      text_data.innerHTML = supposed_data
+      getTrendingTags()
+      getPostsTopPosts()
+  </script>
+<span style="opacity: 0;">Ömer</span>
+</body>
+</html>

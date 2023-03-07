@@ -4,26 +4,93 @@
     <script src="/scripts/home/utils.js"></script>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/styles/account/index.css">
+    <meta name="description" content="{{ post.title }}">
+    <meta name="news_keywords" content="{{ post.title }}">
+    <meta property="og:site_name" content="grandassembly.net">
+    <meta property="og:title" content="{{ post.title }}">
+    <meta property="og:description" content="Devamını oku">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9607757152749129"
+     crossorigin="anonymous"></script>
+    {% if post.has_image %}
+        {% if not post.is_video %}
+            <meta property="og:image" content="https://grandassembly.net/{{ post.image_uri }}">
+        {% endif %}
+    {% endif %}
+    <meta property="og:url" content="https://grandassembly.net/view-post/post.post_id">
+    <meta property="og:type" content="article">
+    <meta property="og:article:tag" content="{{ post.title }}">
+    <meta property="og:article:section" content="gundem">
+    <meta property="eng:Id" content="110">
+    <meta property="eng:categoryName" content="gundem">
+    <meta property="og:article:author" content="GrandAssembly">
+    <meta property="og:locale" content="tr_TR">
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
-    <title>GrandAssembly | The global discussion</title>
+    <title>{{ post.title }} | GrandAssembly</title>
   <link rel="stylesheet" href="/styles/home/index.css">
   <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
+    <style>
+        button[name="question-choice"]{
+            width: 100%; background-color: white; border: 1px solid gray; border-radius: 15px; min-height: 50px; margin-top: 10px;
+            font-size: 20px;
+        }
+
+        button[name="question-choice"]:hover{
+            background-color: rgb(150, 150, 150);
+            color: white;
+        }
+        .tooltip {
+          position: relative;
+          display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 140px;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px;
+          position: absolute;
+          z-index: 1;
+          bottom: 150%;
+          left: 50%;
+          margin-left: -75px;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+
+        .tooltip .tooltiptext::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: #555 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
+          opacity: 1;
+        }
+    </style>
 </head>
 <body style="padding-bottom: 50px; background-color: white">
   <div class="header-main" style="z-index: 99">
       <img src="/static/grandassembly.png" onclick="document.location = '/'" id="assembly-logo" alt="">
-      <span style="float: left; margin-top: 17px" onclick="document.location = '/'">GrandAssembly</span></div>
+      <span style="float: left; margin-top: 15px" onclick="document.location = '/'">GrandAssembly</span></div>
         <div style="z-index: 9999; position: relative">
             {% if not user.is_authenticated %}
-              <i style="font-size: 2rem; position: fixed; right: 15px; top: 8px" onclick="document.location = '/account/login'" class="fa-solid fa-right-to-bracket"></i>
+                <button style="position: fixed; right: 25px; top: 4px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/login'" class=""> Giriş Yap</button>
             {% else %}
-                <i style="font-size: 2rem; position: fixed; right: 15px; top: 8px" onclick="document.location = '/account/logout'" class="fa-solid fa-right-from-bracket"></i>
-                <i style="font-size: 2rem; position: fixed; right: 75px; top: 8px" onclick="window.open('/new/post')" class="fa-solid fa-paper-plane"></i>
-            {% endif %}
+                <button style="position: fixed; right: 25px; top: 4px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/choose'" class="">Hesaplar</button>            {% endif %}
+
         </div>
   <div class="side-menu">
-      <h1 style="margin-left: 15px; margin-top: 50px">Top Headers</h1>
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Başlıklar</h1>
       <hr style="width: 90%">
       <ul id="top-headers">
 
@@ -32,55 +99,341 @@
       <div style="margin: 15px; position: fixed; bottom: 0px">
           <hr style="width: 18vw">
           @{{ user.username }}
-            <p style="color: gray">{{ user.balance }}</p>
-            <i style="position: fixed; left: 15vw; bottom: 50px; font-size: 2rem; margin-top: 5px" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+
+            <p style="color: gray" class="user-balance">{{ user.balance }}</p>
+        <button style="position: fixed; left: 15vw; bottom: 50px; font-size: 1rem; margin-top: 5px;  color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/trading'">Token Al</button>
       </div>
       {% endif %}
   </div>
   <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
-      <h1 style="margin-left: 15px; margin-top: 50px">Tags</h1>
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Tagler</h1>
       <hr style="width: 90%">
       <ul id="tags-trending">
       </ul>
+      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Paylaş</button>
 
   </div>
   <br>
   <br>
   {% if is_authenticated %}
-  <div style="width: 100%; position: fixed; bottom: 0; height: 50px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
         <span>@{{ user.username }}</span>
-        <p style="color: gray">{{ user.balance }} GAT</p>
-        <i style="position: fixed; right: 10px; bottom: 30px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+        <p style="color: gray" class="user-balance">{{ user.balance }} GAT</p>
+      <i style="position: fixed; right: 75px; bottom: 40px; font-size: 2rem" onclick="document.location = '/whats-popular'" class="fa-solid fa-hashtag"></i>
+        <i style="position: fixed; right: 10px; bottom: 40px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
   </div>
   {% endif %}
   <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
       <div style="position: relative; top: 20px; float: right; margin-right: 15px">
-          <i onclick="document.location = '/moonvote/{{ post.post_id }}'" style="font-size: 1.5rem; margin-right: 10px" class="fa-solid fa-rocket"></i>
-          <span>{{ post.net_votes }}</span>
-            <i style="margin-left: 10px; font-size: 1.5rem" onclick="document.location = '/hellvote/{{ post.post_id }}'" class="fa-solid fa-fire-flame-simple"></i>
+          <i onclick="dv()" style="font-size: 1.5rem; margin-right: 10px" class="fa-regular fa-face-smile"></i>
+          <span id="net-votes">{{ post.net_votes }}</span>
+            <i style="margin-left: 10px; font-size: 1.5rem" onclick="hv()" class="fa-regular fa-face-frown"></i>
       </div>
-        <p style="color: gray" onclick="document.location = '/account/{{ post.creator_username }}'">@{{ post.creator_username }}</p>
+        <p style="color: gray"><span onclick="document.location = '/account/{{ post.creator_username }}'">@{{ post.creator_username }}</span>
+        {% if is_verified %}
+            <i class="far fa-check-circle" style="font-size: 15px; color: dodgerblue; margin-left: 0"></i>
+            {% endif %}{% if user_followed %}
+                <i class="fa-regular fa-square-check" onclick="document.location = '/post/unfollow/{{ creator.id }}/{{ post.post_id }}'" style="font-size: 15px; color: indianred; margin-left: 0;"></i>
+            {% else %}
+                <i class="fa-regular fa-square-plus" onclick="document.location = '/post/follow/{{ creator.id }}/{{ post.post_id }}'" style="font-size: 15px; color: indianred; margin-left: 0;"></i>
+            {% endif %}
+        </p>
         <h1>{{ post.title }}</h1>
-      <p>{{ post.text_body }}</p>
-    {% if post.has_image %}
-      <img src="{{ post.image_uri }}" style="width: 100%;" alt="">
+      {% if post.has_image %}
+      {% if post.is_video %}
+        <br>
+        <center style="width: 100%;"><video src="{{ post.image_uri }}" style="max-height: 600px; max-width: 100%;" alt="" controls loop></video></center>
+      {% else %}
+        <br>
+        <img src="{{ post.image_uri }}" style="width: 100%;" alt="">
+      {% endif %}
     {% endif %}
+      <p id="post_body">{{ post.text_body }}</p>
+<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=63e233cc501e200012b729e0&product=inline-share-buttons&source=platform" async="async"></script>     <div class="sharethis-inline-share-buttons"></div>
+      <br>
+      <hr>
+      <p style="color:gray;">{{ post.date_delta }}</p>
+      {% for j in questions %}
+        <div class="qq-ind">
+            {% if not post.tok_poll %}
+                <h2>{{ j.question }}</h2>
+            {% else %}
+                <h2>{{ j.question }} <i style="color: dodgerblue" class="fa-solid fa-medal"></i></h2>
+            {% endif %}
+
+            {% if j.has_image %}
+                <img src="/file_content/{{ j.id }}" style="width: 100%;" alt="">
+            {% endif %}
+            {% for option in j.options %}
+                {% if j.tf_q %}
+                    <button class="{{ j.question }}" name="question-choice" onclick="chooseOptionTF(this, '{{ option.value }}', `{{ j.question }}`, '{{ j.is_last_question }}', '{{ j.correct_option.option }}')">{{ option.option }}</button>
+                {% else %}
+                    {% if j.is_interactive_story %}
+                        <button class="{{ j.question }}" name="question-choice" onclick="chooseOptionIntS(this, {{ option.value }}, `{{ j.question }}`, '{{ j.is_last_question }}')">{{ option.option }}</button>
+                    {% else %}
+                        {% if is_poll %}
+                            <button class="{{ j.question }}" name="question-choice" id="{{j.question}}-{{ option.option }}" onclick="chooseOptionPoll(this, {{ option.value }}, `{{ j.question }}`, '{{ j.id }}')">{{ option.option }}</button>
+                        {% else %}
+                            <button class="{{ j.question }}" name="question-choice" onclick="chooseOption(this, {{ option.value }}, `{{ j.question }}`, '{{ j.is_last_question }}')">{{ option.option }}</button>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+      {% endfor %}
+      <h2 id="points-tot" style="display: none">Total Points: 10</h2>
+      <p>{{ view_count }}</p>
+      {% if user.username == post.creator_username %}
+        <a style="color: dodgerblue; text-decoration: none" href="/advertise/{{ post.post_id }}">Öne Çıkar</a>
+        <br>
+        <br>
+      {% endif %}
+      <div class="tooltip">
+          <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+        <i onmouseout="outFunc()" style="font-size: 1.5rem" onclick="shareURLInPage()" class="fa-solid fa-link"></i>
+      </div>
+      {% if questions_exist %}
+          {% if questions.0.is_interactive_story %}
+            <script>
+                for(let i = 0; i < document.getElementsByClassName("qq-ind").length; i++){
+                  document.getElementsByClassName("qq-ind")[i].style.display = "none"
+              }
+              document.getElementsByClassName("qq-ind")[0].style.display = "block";
+            </script>
+          {% endif %}
+      {% endif %}
+      <script>
+          function adjustHeight(el){
+                el.style.height = (el.scrollHeight > el.clientHeight) ? (el.scrollHeight)+"px" : "60px";
+            }
+          window.test_val = 0
+          document.addEventListener("selectionchange",event=>{
+              if(document.getSelection().anchorNode === document.getElementsByTagName("form")[0]){
+                  return;
+              }
+              let all_comments = document.getElementsByClassName("comment-c")
+              let c_div = document.getElementsByClassName("com-div")
+              let selection = document.getSelection ? document.getSelection().toString() :  document.selection.createRange().toString() ;
+              if(selection.length < 3){
+                  for(let i = 0; i < all_comments.length; i++){
+                      c_div[i].style.display = "block"
+                  }
+                  return;
+              }
+              document.getElementById("comment-inp").value = `"${selection}"`
+              for(let i = 0; i < all_comments.length; i++){
+                  if(all_comments[i].innerText.includes(selection)){
+                      c_div[i].style.display = "block"
+                  }else if(selection.includes(all_comments[i].innerText.split(`"`)[1])){
+                      c_div[i].style.display = "block"
+                  }
+                  else {
+                      c_div[i].style.display = "none"
+                  }
+              }
+              adjustHeight(document.getElementById("comment-inp"))
+          })
+          function chooseOption(element_choose, option_val, question, end_test){
+              let other_options = document.getElementsByClassName(question)
+              let outcomes = {{ outcomes | safe }}
+              for(let i = 0; i < other_options.length; i++){
+                  other_options[i].onclick = function() {
+                      return;
+                  }
+              }
+              window.test_val += option_val
+              element_choose.style.backgroundColor = "gray"
+              element_choose.style.color = "white"
+              if(end_test === 'True'){
+                if(outcomes[window.test_val]){
+                    document.getElementById("points-tot").innerText = outcomes[window.test_val]
+                }else{
+                    document.getElementById("points-tot").innerText = "Toplam Puanınız: " + window.test_val;
+                }
+                document.getElementById("points-tot").style.display = "block";
+              }
+          }
+          function chooseOptionIntS(element_choose, option_val, question){
+              let outcomes = {{ outcomes | safe }}
+              for(let i = 0; i < document.getElementsByClassName("qq-ind").length; i++){
+                  document.getElementsByClassName("qq-ind")[i].style.display = "none"
+              }
+              document.getElementsByClassName("qq-ind")[parseInt(option_val)].style.display = "block";
+              window.test_val += option_val
+          }
+          function modifyFunction(data){
+              if(data["is_answered"] === "positive"){
+                  let other_options = document.getElementsByClassName(data["qq_id"])
+                  document.getElementById(data["qq_id"] + "-" + data["given_answer"]).style.color = "white"
+                  document.getElementById(data["qq_id"] + "-" + data["given_answer"]).style.backgroundColor = "dodgerblue"
+                  let results = data["results"]
+                  for(let r in results){
+                      try{
+                        if(document.getElementById(data["qq_id"] + "-" + r).innerHTML.includes(": " + results[r])){
+                            continue
+                        }
+                        document.getElementById(data["qq_id"] + "-" + r).innerHTML += ": " + results[r]
+                      }catch (err){
+                          continue
+                      }
+
+                  }
+                  for(let i = 0; i < other_options.length; i++){
+                      other_options[i].onclick = function() {
+                          return 0;
+                      }
+                  }
+              }
+          }
+          function checkPoll(){
+              let questions = {{ qq_safe | safe }}
+              for(let question in questions){
+                  fetch("/interact-poll/q=" + questions[question]["id"])
+                  .then((response) => response.json())
+                  .then((data) => this.modifyFunction(data));
+              }
+          }
+          {% if is_poll %}
+              checkPoll()
+          {% endif %}
+          function chooseOptionPoll(element_choose, option_val, question, q_id){
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", '/interact-poll/q=' + q_id, true);
+
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onreadystatechange = () => {
+                  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                      let json_resp = JSON.parse(xhr.responseText);
+                      if(json_resp["is_answered"] === "positive"){
+                          element_choose.style.backgroundColor = "dodgerblue"
+                          element_choose.style.color = "white"
+
+                          let results = json_resp["results"]
+                          for(let r in results){
+                              document.getElementById(r).innerHTML += ": " + results[r]
+                          }
+                          return 0;
+                      }else{
+                          element_choose.style.backgroundColor = "dodgerblue"
+                          element_choose.style.color = "white"
+                          let other_options = document.getElementsByClassName(question)
+
+                          {% if post.tok_poll %}
+                          window.user_balance -= 5
+                          let balances = document.getElementsByClassName("user-balance")
+                          for(let i = 0; i < balances.length; i++){
+                              balances[i].innerHTML = window.user_balance
+                          }
+                          {% endif %}
+
+                          for(let i = 0; i < other_options.length; i++){
+                              other_options[i].onclick = function() {
+                                  return 0;
+                              }
+                          }
+                          checkPoll()
+                      }
+                  }
+                }
+                xhr.send("answer=" + element_choose.innerText);
+          }
+          function chooseOptionTF(element_choose, option_val, question, end_test, correct_option){
+              let other_options = document.getElementsByClassName(question)
+              let outcomes = {{ outcomes | safe }}
+              element_choose.style.backgroundColor = "rgb(245, 86, 86)"
+              element_choose.style.color = "white"
+              element_choose.style.border = "none"
+              for(let i = 0; i < other_options.length; i++){
+                  other_options[i].onclick = function() {
+                      return;
+                  }
+                  if(other_options[i].innerHTML === correct_option){
+                      other_options[i].style.backgroundColor = "rgb(140, 204, 111)"
+                      other_options[i].style.color = "white"
+                      other_options[i].style.border = "none"
+                  }
+              }
+
+              if(element_choose.innerHTML === correct_option){
+                  window.test_val += 1
+              }
+              if(end_test === 'True'){
+                if(outcomes[window.test_val]){
+                    document.getElementById("points-tot").innerText = outcomes[window.test_val]
+                }else{
+                    document.getElementById("points-tot").innerText = "Toplam Puanınız: " + window.test_val;
+                }
+                document.getElementById("points-tot").style.display = "block";
+              }
+          }
+
+          window.net_votes = {{ post.net_votes }}
+          {% if user.balance %}
+            window.user_balance = {{ user.balance }}
+          {% endif %}
+          function shareURLInPage() {
+              var copyText = "https://grandassembly.net/p/{{ post.post_id }}";
+              navigator.clipboard.writeText(copyText);
+
+              var tooltip = document.getElementById("myTooltip");
+              tooltip.innerHTML = "Copied Post URL";
+            }
+
+            function outFunc() {
+              var tooltip = document.getElementById("myTooltip");
+              tooltip.innerHTML = "Copy to clipboard";
+            }
+            function dv(){
+              fetch('/moonvote/{{ post.post_id }}')
+                window.net_votes += 1
+                window.user_balance -= 1
+                let balances = document.getElementsByClassName("user-balance")
+                for(let i = 0; i < balances.length; i++){
+                    balances[i].innerHTML = window.user_balance
+                }
+                document.getElementById("net-votes").innerHTML = window.net_votes
+            }
+            function hv() {
+                fetch('/hellvote/{{ post.post_id }}')
+                window.net_votes -= 1
+                window.user_balance -= 1
+                let balances = document.getElementsByClassName("user-balance")
+                for(let i = 0; i < balances.length; i++){
+                    balances[i].innerHTML = window.user_balance
+                }
+                document.getElementById("net-votes").innerHTML = window.net_votes
+            }
+      </script>
       <br>
       <br>
       <form method="post" enctype="multipart/form-data">
-          <input type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); outline: none; width: 90%; font-size: 1rem" name="comment" placeholder="Comment(s)">
+          <textarea onkeyup="adjustHeight(this)" type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); outline: none; width: 90%; font-size: 1rem; resize: none" name="comment" id="comment-inp" placeholder="Yorum"></textarea>
           <br>
-          <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px" onclick="document.location = '/follow-tag/{{ tag_name }}'" class="button-main-register">Post Comment</button>
+          <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px" onclick="document.location = '/follow-tag/{{ tag_name }}'" class="button-main-register">Paylaş</button>
       </form>
       <br>
       {% for i in comments %}
-          <div style="border: 1px solid #e3e3e3; border-radius: 5px; padding-left: 15px; margin-top: 10px">
+          <div style="border: 1px solid #e3e3e3; border-radius: 5px; padding-left: 15px; padding-right: 15px; margin-top: 10px" class="com-div">
             <p style="color: #888888; font-size: 12px">{{ i.commenter }}</p>
-            <p style="color: black; font-size: 1rem">{{ i.content }}</p>
+            <p class="comment-c" style="color: black; font-size: 1rem">{{ i.content }}</p>
           </div>
       {% endfor %}
   </div>
   <script>
+      let text_data  = document.getElementById("post_body")
+      let supposed_data = "{{ post.text_body }}".replaceAll("&amp;newline&amp;", "<br>")
+      for(let i = 0; i < supposed_data.split(" ").length; i++){
+          if(supposed_data.split(" ")[i].substring(0, 4) === "http" && supposed_data.split(" ")[i].length > 10){
+              let ext_link = supposed_data.split(" ")[i]
+              supposed_data = supposed_data.replace(supposed_data.split(" ")[i], `<a style="color: dodgerblue" href='${ext_link}'>${ext_link}</a>`)
+          }
+          if(supposed_data.split(" ")[i].charCodeAt(0) === 35){
+              let tag_real = supposed_data.split(" ")[i].replace("#", "")
+              supposed_data = supposed_data.replace(supposed_data.split(" ")[i], `<a style="color: dodgerblue" href='/tags/${tag_real}'>#${tag_real}</a>`)
+          }
+      }
+      text_data.innerHTML = supposed_data
       getTrendingTags()
       getPostsTopPosts()
   </script>

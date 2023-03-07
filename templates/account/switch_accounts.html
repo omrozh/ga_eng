@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Change your account | GrandAssembly</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
+    <style>
+        body{
+            font-family: "Open Sans";
+        }
+    </style>
+</head>
+<body>
+    <center class="center-div-form" style="max-height: 500px; overflow-y: auto; width: 450px; border: 1px solid #dadce0; max-width: 90vw; overflow-x: hidden">
+        <center>
+            <img src="/static/grandassembly.png" style="width: 50px" alt="">
+        </center>
+        <h1>Hesap Seç</h1>
+        <div style="margin-top: 25px; margin-left: 50px">
+            {% for i in accounts %}
+                <div style="text-align: left" onclick="document.location = '/account/change/{{ i.username }}/{{ i.password }}'">
+                    <br>
+                    <p style="color: gray">{{ i.username }}</p>
+                    <p style="color: gray; margin-top: -15px; font-size: 12px">{{ i.email }}</p>
+                    <hr style="width: 350px; float: left; max-width: 90%">
+                </div>
+            {% endfor %}
+            <div style="text-align: left" onclick="document.location = '/account/login'">
+                <br>
+                <p style="color: gray">Hesap Ekle</p>
+                <p style="color: gray; margin-top: -15px; font-size: 12px">Başka bir hesaba giriş yap</p>
+                <hr style="width: 350px; float: left; max-width: 90%">
+            </div>
+            <div style="text-align: left" onclick="document.location = '/account/logout'">
+                <br>
+                <p style="color: gray">Çıkış Yap</p>
+                <p style="color: gray; margin-top: -15px; font-size: 12px">Bütün Hesaplardan Çıkış Yap</p>
+                <hr style="width: 350px; float: left; max-width: 90%">
+            </div>
+        </div>
+    </center>
+</body>
+</html>

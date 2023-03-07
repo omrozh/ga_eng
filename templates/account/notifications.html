@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/scripts/home/utils.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <title>GrandAssembly | The global discussion</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
+  <link rel="stylesheet" href="/styles/home/index.css">
+  <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
+</head>
+<body style="padding-bottom: 15px">
+  <div class="header-main" style="z-index: 99">
+      <img src="/static/grandassembly.png" onclick="document.location = '/'" id="assembly-logo" alt="">
+      <span style="float: left; margin-top: 15px" onclick="document.location = '/'">GrandAssembly</span></div>
+        <div style="z-index: 9999; position: relative">
+            {% if not user.is_authenticated %}
+                <button style="position: fixed; right: 25px; top: 4px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/login'" class="">Giriş Yap</button>
+            {% else %}
+                <button style="position: fixed; right: 25px; top: 4px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/choose'" class="">Hesaplar</button>
+            {% endif %}
+        </div>
+  <div class="side-menu">
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Başlıklar</h1>
+      <hr style="width: 90%">
+      <ul id="top-headers">
+
+      </ul>
+      {% if is_authenticated %}
+      <div style="margin: 15px; position: fixed; bottom: 0px">
+          <hr style="width: 18vw">
+          @{{ user.username }}
+            <p style="color: gray">{{ user.balance }}</p>
+          <button style="position: fixed; left: 15vw; bottom: 50px; font-size: 1rem; margin-top: 5px;  color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/trading'">Token Al</button>
+      </div>
+      {% endif %}
+  </div>
+  <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Tagler</h1>
+      <hr style="width: 90%">
+      <ul id="tags-trending">
+      </ul>
+      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Paylaş</button>
+
+  </div>
+  <br>
+  <br>
+  {% if is_authenticated %}
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
+        @{{ user.username }}
+        <p style="color: gray">{{ user.balance }} GAT</p>
+            <i style="position: fixed; right: 75px; bottom: 40px; font-size: 2rem" onclick="document.location = '/whats-popular'" class="fa-solid fa-hashtag"></i>
+
+        <i style="position: fixed; right: 10px; bottom: 40px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+  </div>
+  {% endif %}
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none; min-height: fit-content">
+          <h1>Bildirimleriniz</h1>
+      </div>
+  {% for i in notifications %}
+    {% if not i.is_read %}
+    <hr>
+      <div onclick="window.location = '{{ i.onclick_link }}'" class="news-feed load-more" style="padding-left: 15px; box-shadow: none; border: none; background-color: rgb(230, 230, 230); min-height: fit-content">
+          <h1>{{ i.notification_head }}</h1>
+          <p>{{ i.notification_body }}</p>
+      </div>
+        <hr>
+    {% else %}
+       <div onclick="window.location = '{{ i.onclick_link }}'" class="news-feed load-more" style="padding-left: 15px; box-shadow: none; border: none; background-color: rgb(240, 240, 240); min-height: fit-content">
+            <h1>{{ i.notification_head }}</h1>
+            <p>{{ i.notification_body }}</p>
+        </div>
+    {% endif %}
+  {% endfor %}
+  <script>
+      getTrendingTags()
+      getPostsTopPosts()
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GrandAssembly</title>
+  <link rel="stylesheet" href="/styles/home/index.css">
+  <link rel="stylesheet" href="/styles/forms/index.css">
+  <link rel="stylesheet" href="/styles/account/index.css">
+  <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/styles/account/index.css">
+</head>
+<body>
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none; width: 100%">
+    <form method="post" enctype="multipart/form-data">
+        <input type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); outline: none; width: 90%; font-size: 1rem" name="comment" placeholder="Yorum">
+        <br>
+        <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px" onclick="document.location = '/follow-tag/{{ tag_name }}'" class="button-main-register">Paylaş</button>
+    </form>
+    {% for i in comments %}
+          <div style="border: 1px solid #e3e3e3; border-radius: 5px; padding-left: 15px; padding-right: 15px; margin-top: 10px">
+            <p style="color: #888888; font-size: 12px">{{ i.commenter }}</p>
+            <p style="color: black; font-size: 1rem">{{ i.content }}</p>
+          </div>
+      {% endfor %}
+  </div>
+</body>
+</html>

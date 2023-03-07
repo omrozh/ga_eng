@@ -7,12 +7,26 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GrandAssembly | Sign in to your account</title>
     <link rel="stylesheet" href="/styles/account/index.css">
+    <style>
+        .w-d{
+            display: none;
+            font-family: "Open Sans";
+        }
+        @media only screen and (max-width: 750px) {
+            .center-div-join{
+                display: none;
+            }
+            .w-d{
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="center-div-join" style="top: -400px;">
-        <h1 class="join-header">Trade $GAT</h1>
-        <h2 class="slogan-header">Assemble together and<span id="slogan-word"> share </span>without bots and spammers.</h2>
-      <h2 class="slogan-header">What are you looking for?</h2>
+    <div class="center-div-join">
+        <h1 class="join-header">Token al/sat</h1>
+        <h2 class="slogan-header">Düşüncelerini <span id="slogan-word"> sansür </span>olmadan özgürce paylaş.</h2>
+      <h2 class="slogan-header">Token satın almak mı para çekmek mi istiyorsun?</h2>
     </div>
     <div class="center-div-form" style="border: none">
         <div id="alerts-div" style="color: dodgerblue; font-family: Roboto; font-size: 1rem">
@@ -20,9 +34,9 @@
         </div>
         <br>
         <div id="form-inputs-1">
-
-          <button class="button-main-register" onclick="document.location = '/trading/buy'">BUY</button>
-          <button class="button-main-register" onclick="document.location = '/trading/sell'">SELL</button>
+            <h1 class="w-d">Token satın almak mı para çekmek mi istiyorsun?</h1>
+          <button class="button-main-register" onclick="document.location = '/trading/buy'">Satın Al</button>
+          <button class="button-main-register" onclick="document.location = '/trading/sell'">Çek</button>
         </div>
     </div>
     <script src="/scripts/account/change-text.js"></script>

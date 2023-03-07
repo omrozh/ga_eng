@@ -15,6 +15,33 @@
     </a>
   </div>
   <div class="news-feed load-more" style="padding: 15px">
+    <h1>Verifications</h1>
+    <br>
+    <br>
+    <a style="color: #1b2f39" href="/admin/verify-user">
+      Verify User
+    </a>
+  </div>
+  <div class="news-feed load-more" style="padding: 15px">
+    <h1>Notifications</h1>
+    <br>
+    <br>
+    <a style="color: #1b2f39" href="/admin/notify">
+      Notify Users
+    </a>
+  </div>
+  <div class="news-feed load-more" style="padding: 15px">
+    <h1>Posts</h1>
+    <br>
+    <br>
+    <a style="color: #1b2f39" href="/admin/delete-post">
+      Delete Post
+    </a>
+  </div>
+  <div class="news-feed load-more" style="padding: 15px">
+    <h1>Users: {{ number_of_users }}</h1>
+  </div>
+  <div class="news-feed load-more" style="padding: 15px">
     <h1>Elections</h1>
     <br>
     <br>
@@ -27,7 +54,7 @@
       Manage Elections
     </a>
     {% for i in elections %}
-      <p>{{ i.id }} | {{ i.election_title }}</p>
+      <p onclick="document.location = '/admin/add-candidate/{{ i.id }}'">{{ i.id }} | {{ i.election_title }}</p>
     {% endfor %}
   </div>
 </body>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/scripts/home/utils.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <title>GrandAssembly | The global discussion</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9607757152749129"
+     crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+        body {
+            background: white;
+            margin: 0;
+            padding: 0;
+            font-family: "Open Sans";
+        }
+
+        h1{
+            cursor: pointer;
+        }
+
+        #search-input{
+            width: 40%;background-color: #eaeaea;color: #888888;padding: 5px;border: 1px solid rgb(220, 220, 220);outline: none;border-radius: 100px;height: 1.5rem;text-indent: 1.5rem;margin: 6px;margin-left: 30vw;margin-top: 20px; position: relative; z-index: 9999
+        }
+
+        .news-feed {
+            width: 600px;
+            min-height: 250px;
+            background: #FFF;
+            margin: 10px auto 0;
+            padding: 10px;
+            border-top: 1px solid rgb(220, 220, 220)
+        }
+
+        .side-menu {
+            width: 25vw;
+            position: fixed;
+            height: 100vh;
+            background-color: white;
+            top: 0;
+            border-right: 1px solid rgb(220, 220, 220);
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .header-main{
+            border-bottom: 1px solid #d0cfcf;
+            width: 100vw;
+            height: 75px;
+            background-color: white;
+            right: 0;
+            position: fixed;
+            top: 0;
+        }
+
+        #assembly-logo{
+            width: 50px;
+            margin-left: 3vw;
+            float: left
+        }
+
+        #bottom-menu{
+            display: none;
+        }
+
+        #logo-div{
+            display: none;
+        }
+
+        @media only screen and (max-width: 1250px) {
+            #logo-div{
+                display: block;
+            }
+            #search-input{
+                margin-left: 15px;
+            }
+            .header-main{
+                width: 100vw;
+            }
+            .side-menu{
+                display: none;
+            }
+            .news-feed{
+                width: 90%;
+            }
+            #assembly-logo{
+                margin-left: 5vw;
+            }
+            #bottom-menu{
+                display: block;
+            }
+        }
+
+        li{
+            list-style-type: none;
+            margin-top: 5px;
+            max-width: 90%;
+        }
+
+        .fa-rocket:hover{
+            color: dodgerblue;
+        }
+        .fa-fire-flame-simple:hover{
+            color: coral;
+        }
+
+        i{
+            color: gray;
+        }
+        li:hover{
+            cursor: pointer;
+        }
+    </style>
+  <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
+</head>
+<body style="padding-bottom: 100px">
+       <div class="header-main" style="z-index: 99;">
+           {% if user.is_authenticated %}
+            {% if not user.did_verify_phone_number %}
+           <script>
+               document.getElementsByClassName("header-main")[0].style.height = "95px"
+               function close_alert(){
+                   document.getElementById('verify_number_alert').style.display = 'none';
+                   document.getElementsByClassName('header-main')[0].style.height = '70px'
+                   document.getElementById("accounts").style.top = "15px"
+               }
+           </script>
+                <center id="verify_number_alert" style="color: white; background-color: red; width: 100%; margin-top: 0; padding-top: 5px; padding-bottom: 5px"><a href="/verify_sms" style="color: white">Emailini onayla</a> 500 token kazan. <span style="text-decoration: underline; margin-left: 25px" onclick="close_alert()">Kapat</span></center>
+            {% endif %}
+           {% endif %}
+	<div id="logo-div">
+	        <img src="/static/grandassembly.png" id="assembly-logo" alt="" style="margin-top: 10px">
+        </div>
+	<input id="search-input" oninput="searchTags()"  placeholder="Kişileri veya tagleri ara" type="text">
+	<div style="z-index: 9999; position: relative">
+            {% if not user.is_authenticated %}
+                <button style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/login'" class="">Giriş Yap</button>
+            {% else %}
+                <button id="accounts" style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/choose'" class="">Hesaplar</button>            {% endif %}
+        </div>
+           {% if user.is_authenticated %}
+            {% if not user.did_verify_phone_number %}
+           <script>
+               document.getElementById("accounts").style.top = "40px"
+               document.getElementById("search-input").style.marginTop = "13px"
+           </script>
+            {% endif %}
+           {% endif %}
+  <div class="side-menu">
+<img src="/static/grandassembly.png" id="assembly-logo" alt=""><span style="float: left; margin-top: 15px">GrandAssembly</span>
+      <h1 style="margin-left: 15px; margin-top: 100px">Trend Başlıklar</h1>
+      <hr style="width: 90%">
+      <ul id="top-headers" style="width: 80%">
+
+      </ul>
+      {% if is_authenticated %}
+      <div style="margin: 15px; position: fixed; bottom: 0px">
+          <hr style="width: 18vw">
+          <span onclick="document.location = '/account/{{ user.username }}'">@{{ user.username }}</span>
+            <br>
+            {% if not user_has_new_notification %}
+                <a href="/account/notifications" style="color: dodgerblue; text-decoration: none">Bildirimler</a>
+            {% else %}
+                <a href="/account/notifications" style="color: indianred; text-decoration: none">Bildirimler</a>
+            {% endif %}
+            <p style="color: gray; margin-top: 0">{{ user.balance }}</p>
+            <button style="position: fixed; left: 15vw; bottom: 50px; font-size: 1rem; margin-top: 5px;  color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/trading'">Token Al</button>
+      </div>
+      {% endif %}
+  </div>
+  <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
+      <h1 style="margin-left: 15px; margin-top: 100px">Trend Tagler</h1>
+      <hr style="width: 90%">
+      <ul id="tags-trending">
+      </ul>
+      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Paylaş</button>
+        {% if highlights_exist %}
+            <p style="color: gray; margin-top: 20px; margin-left: 5%">Takip Ettiğiniz Hesaplardan Öneriler</p>
+            <div style="width: 90%; display: inline-block; margin-left: 5%; margin-top: 25px; max-height: 90px; overflow-y: auto;">
+                  {% for i in highlights %}
+                    <strong style="color: black; text-decoration: underline" onclick="document.location = '/view-post/{{ i.post_id }}'">{{ i.post_title }}</strong>
+                    <p style="color: gray">@{{ i.creator_username }}</p>
+                  {% endfor %}
+              </div>
+           {% endif %}
+  </div>
+<div id="search-results" class="news-feed" style="display: none">
+</div>
+  <br>
+  <br>
+  {% if is_authenticated %}
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
+        <span onclick="document.location = '/account/{{ user.username }}'">@{{ user.username }}</span>
+        <br>
+        {% if not user_has_new_notification %}
+            <a href="/account/notifications" style="color: dodgerblue; text-decoration: none">Bildirimler</a>
+        {% else %}
+            <a href="/account/notifications" style="color: indianred; text-decoration: none">Bildirimler</a>
+        {% endif %}
+        <p style="color: gray; margin-top: 0">{{ user.balance }}</p>
+      <i style="position: fixed; right: 75px; bottom: 40px; font-size: 2rem" onclick="document.location = '/whats-popular'" class="fa-solid fa-hashtag"></i>
+        <i style="position: fixed; right: 10px; bottom: 40px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+  </div>
+  {% endif %}
+  <script>
+      {% if not is_authenticated %}
+        getPostsUnauth()
+      {% else %}
+        getPostsAuth()
+      {% endif %}
+      getTrendingTags()
+      getPostsTopPosts()
+  </script>
+</body>
+</html>

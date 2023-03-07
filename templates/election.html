@@ -17,7 +17,8 @@
     <h1>Candidates</h1>
     {% for i in candidates %}
     <hr>
-      <p>@{{ i.user_fk }}</p> <a href="/cast_vote/{{ i.user_fk }}">Vote</a>
+      <p>@{{ i.user_fk }}</p> <a style="background-color: dodgerblue; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-decoration: none" href="/cast_vote/{{ i.user_fk }}">Vote</a>
+    <p>Total Votes: {{ i.total_votes }}</p>
     <hr>
     {% endfor %}
   </div>

@@ -8,7 +8,7 @@ function getRandomInt(max) {
 
     return random_out
 }
-slogan_words = [" share ", " discuss ", " chat "]
+slogan_words = [" sansür ", " spam ", " botlar "]
 function changeSlogan(){
     let random_text = getRandomInt(3)
     window.previous = random_text
