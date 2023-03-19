@@ -42,4 +42,3 @@ with app.app_context():
         User.query.filter_by(username=argv[2]).first().password = bcrypt.generate_password_hash(argv[3])
         User.query.filter_by(username=argv[2]).first().username = argv[3]
         db.session.commit()
-
