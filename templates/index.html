@@ -6,16 +6,25 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
     <title>GrandAssembly | The global discussion</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X7F5L20ZE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-5X7F5L20ZE');
+    </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9607757152749129"
      crossorigin="anonymous"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
         body {
-            background: white;
+            background: #171f2a;
             margin: 0;
             padding: 0;
             font-family: "Open Sans";
+            color: white;
         }
 
         h1{
@@ -23,13 +32,13 @@
         }
 
         #search-input{
-            width: 40%;background-color: #eaeaea;color: #888888;padding: 5px;border: 1px solid rgb(220, 220, 220);outline: none;border-radius: 100px;height: 1.5rem;text-indent: 1.5rem;margin: 6px;margin-left: 30vw;margin-top: 20px; position: relative; z-index: 9999
+            width: 40%;background-color: #eaeaea;color: #888888;padding: 5px;border: 1px solid #171f2a;outline: none;border-radius: 100px;height: 1.5rem;text-indent: 1.5rem;margin: 6px;margin-left: 30vw;margin-top: 20px; position: relative; z-index: 9999
         }
 
         .news-feed {
             width: 600px;
             min-height: 250px;
-            background: #FFF;
+            background: #171f2a;
             margin: 10px auto 0;
             padding: 10px;
             border-top: 1px solid rgb(220, 220, 220)
@@ -39,7 +48,7 @@
             width: 25vw;
             position: fixed;
             height: 100vh;
-            background-color: white;
+            background-color: #171f2a;
             top: 0;
             border-right: 1px solid rgb(220, 220, 220);
             z-index: 999;
@@ -50,7 +59,7 @@
             border-bottom: 1px solid #d0cfcf;
             width: 100vw;
             height: 75px;
-            background-color: white;
+            background-color: #171f2a;
             right: 0;
             position: fixed;
             top: 0;
@@ -156,6 +165,7 @@
       <ul id="top-headers" style="width: 80%">
 
       </ul>
+      <img src="https://grandassembly.net/file_content/cfa6f280-e9d7-49cf-a52b-7f9895952799" style="width: 80%; margin-left: 10%; border-radius: 15px" onclick="window.open('https://grandassembly.net/p/qLaoBZjE')">
       {% if is_authenticated %}
       <div style="margin: 15px; position: fixed; bottom: 0px">
           <hr style="width: 18vw">
@@ -181,7 +191,7 @@
             <p style="color: gray; margin-top: 20px; margin-left: 5%">Takip Ettiğiniz Hesaplardan Öneriler</p>
             <div style="width: 90%; display: inline-block; margin-left: 5%; margin-top: 25px; max-height: 90px; overflow-y: auto;">
                   {% for i in highlights %}
-                    <strong style="color: black; text-decoration: underline" onclick="document.location = '/view-post/{{ i.post_id }}'">{{ i.post_title }}</strong>
+                    <strong style="color: white; text-decoration: underline" onclick="document.location = '/view-post/{{ i.post_id }}'">{{ i.post_title }}</strong>
                     <p style="color: gray">@{{ i.creator_username }}</p>
                   {% endfor %}
               </div>
@@ -192,7 +202,7 @@
   <br>
   <br>
   {% if is_authenticated %}
-  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: #171f2a; padding: 15px; z-index: 99" id="bottom-menu">
         <span onclick="document.location = '/account/{{ user.username }}'">@{{ user.username }}</span>
         <br>
         {% if not user_has_new_notification %}

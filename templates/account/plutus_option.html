@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Plutus Connect | GrandAssembly</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
+    <style>
+        body{
+            font-family: "Open Sans";
+        }
+    </style>
+</head>
+<body>
+    <center class="center-div-form" style="max-height: 500px; overflow-y: auto; width: 450px; border: 1px solid #dadce0; max-width: 90vw; overflow-x: hidden">
+        <center>
+            <img src="/static/grandassembly.png" style="width: 50px" alt="">
+        </center>
+        <h1>Plutus'e bağlanılıyor</h1>
+        <p>GrandAssembly tokenlerinizin Plutus tokenine çevrilmesini istiyor musunuz?</p>
+      Token Bakiyeniz: {{ user.balance }}
+      <br>
+      <form method="post" enctype="multipart/form-data" style="margin-top: 15px">
+        <input type="checkbox" name="convert_tokens" style="display: none" id="convert_tokens">
+        <button type="button" onclick="tickAndSubmit(false)" style="border: dodgerblue 1px solid; color: dodgerblue; background-color: white; font-size: 1.5rem; border-radius: 5px; padding: 5px 25px; ">Hayır</button>
+        <button type="button" onclick="tickAndSubmit(true)" style="border: dodgerblue 1px solid; color: white; background-color: dodgerblue; font-size: 1.5rem; border-radius: 5px; padding: 5px 25px;">Evet</button>
+      </form>
+    </center>
+    <script>
+      function tickAndSubmit(tick_box){
+        document.getElementById("convert_tokens").checked = tick_box;
+        document.getElementsByTagName("form")[0].submit()
+      }
+    </script>
+</body>
+</html>

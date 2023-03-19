@@ -46,7 +46,7 @@
   <br>
   <br>
   {% if is_authenticated %}
-  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: #171f2a; padding: 15px; z-index: 99" id="bottom-menu">
         @{{ user.username }}
         <p style="color: gray">{{ user.balance }} GAT</p>
                   <i style="position: fixed; right: 75px; bottom: 40px; font-size: 2rem" onclick="document.location = '/whats-popular'" class="fa-solid fa-hashtag"></i>
@@ -61,6 +61,9 @@
             {% endif %}
       <p style="color: gray">Number of followers: {{ number_of_subs }}</p>
       <br>
+      {% if user.is_admin %}
+            <p>{{ user_info.email }}</p>
+        {% endif %}
       {% if not tag_is_followed %}
         <button style="height: 50px; padding: 10px" onclick="document.location = '/account/follow/{{ user_info.id }}'" class="button-main-register">Follow This User</button>
       {% elif tag_is_followed %}
@@ -70,9 +73,9 @@
   {% for post in posts %}
     <div onclick="document.location = '/view-post/{{ post.id }}'" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
       <div style="position: relative; top: 20px; float: right; margin-right: 15px">
-          <i onclick="document.location = '/moonvote/{{ post.post_id }}'" style="font-size: 1.5rem; margin-right: 10px" class="fa-regular fa-face-smile"></i>
+          <i onclick="document.location = '/moonvote/{{ post.post_id }}'" style="font-size: 1.5rem; margin-right: 10px" class="fa-regular fa-arrow-trend-up"></i>
           <span>{{ post.net_votes }}</span>
-            <i style="margin-left: 10px; font-size: 1.5rem" onclick="document.location = '/hellvote/{{ post.post_id }}'" class="fa-regular fa-face-frown"></i>
+            <i style="margin-left: 10px; font-size: 1.5rem" onclick="document.location = '/hellvote/{{ post.post_id }}'" class="fa-regular fa-arrow-trend-down"></i>
       </div>
         <p style="color: gray">@{{ user_info.username }}</p>
         <h1>{{ post.title }}</h1>

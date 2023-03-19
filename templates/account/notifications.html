@@ -61,13 +61,13 @@
   {% for i in notifications %}
     {% if not i.is_read %}
     <hr>
-      <div onclick="window.location = '{{ i.onclick_link }}'" class="news-feed load-more" style="padding-left: 15px; box-shadow: none; border: none; background-color: rgb(230, 230, 230); min-height: fit-content">
+      <div onclick="window.location = '{{ i.onclick_link }}'" class="news-feed load-more" style="padding-left: 15px; box-shadow: none; border: none; background-color: #171f2a; min-height: fit-content">
           <h1>{{ i.notification_head }}</h1>
           <p>{{ i.notification_body }}</p>
       </div>
         <hr>
     {% else %}
-       <div onclick="window.location = '{{ i.onclick_link }}'" class="news-feed load-more" style="padding-left: 15px; box-shadow: none; border: none; background-color: rgb(240, 240, 240); min-height: fit-content">
+       <div onclick="window.location = '{{ i.onclick_link }}'" class="news-feed load-more" style="padding-left: 15px; box-shadow: none; border: none; background-color: #171f2a; min-height: fit-content">
             <h1>{{ i.notification_head }}</h1>
             <p>{{ i.notification_body }}</p>
         </div>

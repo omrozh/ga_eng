@@ -1,6 +1,6 @@
 import stripe
 
-stripe.api_key = "*** "
+stripe.api_key = "sk_test_51M68neFElooTBFjOo0sH68rLEJ8c2bPniMa34GYRUv2u40xxYT6RpqSJ6MW7cjPptp1NhuBkOiSyuUuRgg2OOkf900WHRP32aa "
 
 
 def create_token(card_information):

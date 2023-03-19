@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>Admin | GrandAssembly</title>
     <link rel="stylesheet" href="/styles/home/index.css">
+  <style>
+    .user-p:hover{
+      text-decoration: line-through;
+    }
+  </style>
 </head>
 <body>
   <div class="news-feed load-more" style="padding: 15px">
@@ -55,6 +60,11 @@
     </a>
     {% for i in elections %}
       <p onclick="document.location = '/admin/add-candidate/{{ i.id }}'">{{ i.id }} | {{ i.election_title }}</p>
+    {% endfor %}
+  </div>
+  <div class="news-feed load-more" style="padding: 15px">
+    {% for user_i in user_list %}
+      <p class="user-p" onclick="window.open('/admin/delete-user/{{ user_i.id }}')">{{ user_i.username }} | {{ user_i.email }}</p>
     {% endfor %}
   </div>
 </body>

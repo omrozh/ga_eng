@@ -1,8 +1,6 @@
-window.registration_step = 0
+window.registration_step = 1
 
 function proceedRegistration(){
-    document.getElementById("form-inputs-1").style.display = "none"
-    document.getElementById("form-inputs-2").style.display = "block"
     if(window.registration_step === 1){
         const xhr = new XMLHttpRequest();
         xhr.open("POST", '/post/register', true);
@@ -11,7 +9,7 @@ function proceedRegistration(){
         xhr.onreadystatechange = () => {
           if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
               if(xhr.responseText === "Registered"){
-                  document.location = "/account/login"
+                  document.location = "/"
               }
               document.getElementById("alerts-div").innerText = xhr.responseText
           }

@@ -14,23 +14,23 @@ function constructPosts(data){
             if(!data_temp["is_video"]){
                 newDiv = `<div onclick="document.location = '/view-post/${data_temp["post_id"]}'" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
                   <div style="position: relative; top: 20px; float: right; margin-right: 15px; z-index: 0">
-                      <i style="font-size: 1.5rem; margin-right: 10px; color: gray" class="fa-regular fa-face-smile"></i>
+                      <i style="font-size: 1.5rem; margin-right: 10px; color: gray" class="fa-solid fa-arrow-trend-up"></i>
                       <span>${data_temp["net_votes"]}</span>
-                        <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-regular fa-face-frown"></i>
+                        <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-solid fa-arrow-trend-down"></i>
                   </div>
                     <p style="color: gray" onclick="document.location = '/account/${data["creator_username"]}'">@${data_temp["creator_username"]}</p>
                     <h1>${data_temp["title"]}</h1>
                   <p>${data_temp["text_body"]}</p>
-                  <img src="${data_temp["image_uri"]}" style="width: 100%;" alt="">
+                  <img src="${data_temp["image_uri"]}" style="width: 100%; border-radius: 15px" alt="">
                   <p style="color: gray">Devamını Oku</p>
               </div>`
             }
             else if(data_temp["is_video"]){
                 newDiv = `<div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
                   <div  onclick="document.location = '/view-post/${data_temp["post_id"]}'" style="position: relative; top: 20px; float: right; margin-right: 15px; z-index: 0">
-                      <i style="font-size: 1.5rem; margin-right: 10px; color: gray" class="fa-regular fa-face-smile"></i>
+                      <i style="font-size: 1.5rem; margin-right: 10px; color: gray" class="fa-solid fa-arrow-trend-up"></i>
                       <span>${data_temp["net_votes"]}</span>
-                        <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-regular fa-face-frown"></i>
+                        <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-solid fa-arrow-trend-down"></i>
                   </div>
                     <p style="color: gray" onclick="document.location = '/account/${data["creator_username"]}'">@${data_temp["creator_username"]}</p>
                     <h1  onclick="document.location = '/view-post/${data_temp["post_id"]}'">${data_temp["title"]}</h1>
@@ -43,9 +43,9 @@ function constructPosts(data){
         else if(!data_temp["has_image"]){
             newDiv = `<div onclick="document.location = '/view-post/${data_temp["post_id"]}'" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
               <div style="position: relative; top: 20px; float: right; margin-right: 15px; z-index: 0">
-                  <i style="font-size: 1.5rem; margin-right: 10px; color: gray" onclick="document.location = '/moonvote/${data_temp["post_id"]}'" class="fa-regular fa-face-smile"></i>
+                  <i style="font-size: 1.5rem; margin-right: 10px; color: gray" onclick="document.location = '/moonvote/${data_temp["post_id"]}'" class="fa-solid fa-arrow-trend-up"></i>
                   <span>${data_temp["net_votes"]}</span>
-                    <i style="margin-left: 10px; font-size: 1.5rem; color: gray" onclick="document.location = '/hellvote/${data_temp["post_id"]}'" class="fa-regular fa-face-frown"></i>
+                    <i style="margin-left: 10px; font-size: 1.5rem; color: gray" onclick="document.location = '/hellvote/${data_temp["post_id"]}'" class="fa-solid fa-arrow-trend-down"></i>
               </div>
                 <p style="color: gray">@${data_temp["creator_username"]}</p>
                 <h1>${data_temp["title"]}</h1>
@@ -56,14 +56,14 @@ function constructPosts(data){
         if(data_temp["has_test"]){
             newDiv = `<div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
                   <div  onclick="document.location = '/view-post/${data_temp["post_id"]}'" style="position: relative; top: 20px; float: right; margin-right: 15px; z-index: 0">
-                      <i style="font-size: 1.5rem; margin-right: 10px; color: gray" class="fa-regular fa-face-smile"></i>
+                      <i style="font-size: 1.5rem; margin-right: 10px; color: gray" class="fa-solid fa-arrow-trend-up"></i>
                       <span>${data_temp["net_votes"]}</span>
-                        <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-regular fa-face-frown"></i>
+                        <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-solid fa-arrow-trend-down"></i>
                   </div>
                     <p style="color: gray" onclick="document.location = '/account/${data["creator_username"]}'">@${data_temp["creator_username"]}</p>
                     <h1  onclick="document.location = '/view-post/${data_temp["post_id"]}'">${data_temp["title"]}</h1>
                   <p>${data_temp["text_body"]}</p>
-                  <img src="${data_temp["image_uri"]}" style="width: 100%;" alt="">
+                  <img src="${data_temp["image_uri"]}" style="width: 100%; border-radius: 15px" alt="">
                   <a onclick="document.location = '/view-post/${data_temp["post_id"]}'" style="color: dodgerblue; text-decoration: none">Testi çözmek için tıkla</a>
                   <p style="color: gray">Devamını Oku</p>
               </div>`
@@ -82,7 +82,7 @@ function addTags(data){
 function topHeaders(data){
     let tags_ul = document.getElementById("top-headers")
     for(let i = 0; i < data.length; i++){
-        tags_ul.innerHTML += `<li><a style="color: black; text-decoration: none" href="/view-post/${data[i]["post_id"]}"><strong>${data[i]["title"]}</strong></a></li><br>`
+        tags_ul.innerHTML += `<li><a style="color: white; text-decoration: none" href="/view-post/${data[i]["post_id"]}"><strong>${data[i]["title"]}</strong></a></li><br>`
     }
 }
 

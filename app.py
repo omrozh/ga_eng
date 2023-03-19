@@ -2,6 +2,7 @@ import random
 
 import flask
 import openai.error
+import requests
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 from uuid import uuid4
@@ -13,12 +14,12 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from string import ascii_letters
 from utils.txt_generation import gen_text
 from flask_mail import Mail, Message
+from os.path import exists
 from flask_migrate import Migrate
-
 
 app = flask.Flask(__name__)
 
-app.config["SECRET_KEY"] = "***"
+app.config["SECRET_KEY"] = "8ujs-fjeud-jdv&e3-fgeu3id-3jfsu2tf+!0"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 
 db = SQLAlchemy(app=app)
@@ -54,6 +55,8 @@ class User(db.Model, UserMixin):
     phone_number = db.Column(db.String)
     did_verify_phone_number = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean)
+    fullname = db.Column(db.String)
+    latest_ip = db.Column(db.String)
 
 
 class Test(db.Model):
@@ -71,6 +74,12 @@ class Question(db.Model):
     answer_choices = db.Column(db.String)
     answer_points = db.Column(db.String)
     test_fk = db.Column(db.String)
+
+
+class ListPoint(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    post_fk = db.Column(db.String)
+    text_body = db.Column(db.String)
 
 
 class CardToken(db.Model):
@@ -138,10 +147,16 @@ class Compliant(db.Model):
     post_fk = db.Column(db.String)
 
 
-class LoginSession(db.Model):
+class Referral(db.Model):
     id = db.Column(db.String, primary_key=True)
-    ip_address = db.Column(db.String)
-    user_agent = db.Column(db.String)
+    referrer = db.Column(db.String)
+    referred_account = db.Column(db.String)
+
+
+class PostView(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    viewer_fk = db.Column(db.String)
+    post_fk = db.Column(db.String)
 
 
 class SuspendedAccount(db.Model):
@@ -228,8 +243,8 @@ def get_coin_price():
 app.config["MAIL_SERVER"] = 'smtp.gmail.com'
 app.config["MAIL_PORT"] = 465
 app.config["MAIL_USE_SSL"] = True
-app.config["MAIL_USERNAME"] = 'omer.ozhan@grandassembly.net'
-app.config["MAIL_PASSWORD"] = 'brnmuhphloocsear'
+app.config["MAIL_USERNAME"] = 'no-reply@grandassembly.net'
+app.config["MAIL_PASSWORD"] = 'kdyjtaofikbkbhff'
 
 mail = Mail(app)
 
@@ -291,7 +306,26 @@ sched.start()
 def admin():
     if not current_user.is_admin:
         return "You do not have the required permissions to view this page."
-    return flask.render_template("admin/admin.html", elections=Election.query.all(), number_of_users=len(User.query.all()))
+    return flask.render_template("admin/admin.html", elections=Election.query.all(),
+                                 number_of_users=len(User.query.all()), user_list=User.query.all())
+
+
+@app.route("/admin/delete-user/<user_id>")
+@login_required
+def delete_user(user_id):
+    if not current_user.is_admin:
+        return "You do not have the required permissions to view this page."
+    user_to_delete = User.query.get(user_id)
+    user_posts = Post.query.filter_by(creator_fk=user_id).all()
+    user_comments = Comment.query.filter_by(commenter=user_to_delete.username).all()
+
+    for i in user_posts:
+        db.session.delete(i)
+    for i in user_comments:
+        db.session.delete(i)
+    db.session.delete(user_to_delete)
+    db.session.commit()
+    return flask.redirect("/admin")
 
 
 def add_bots(number_of_posts):
@@ -544,7 +578,8 @@ def index():
     highlights = []
     user_has_new_notification = False
     if current_user.is_authenticated:
-        user_has_new_notification = len(Notification.query.filter_by(user_fk=current_user.id).filter_by(is_read=False).all()) > 0
+        user_has_new_notification = len(
+            Notification.query.filter_by(user_fk=current_user.id).filter_by(is_read=False).all()) > 0
         user_follows = FollowUser.query.filter_by(follower_fk=current_user.id).all()
 
         for i in Post.query.filter_by(post_date=datetime.today().date()).all():
@@ -562,7 +597,7 @@ def index():
             } for i in highlights
         ]
     else:
-        pass
+        return flask.redirect("/account/register")
     highlights_exist = len(highlights) > 0
 
     return flask.render_template("index.html", is_authenticated=current_user.is_authenticated, user=current_user,
@@ -653,9 +688,10 @@ def register():
             return reason
 
         elif is_validated:
-            new_user = User(id=str(uuid4()), username=values["username"],
+            new_user = User(id=str(uuid4()), username=values["username"].replace(" ", ""),
                             password=bcrypt.generate_password_hash(values["password"]), email=values["email"],
-                            phone_number=values["phone_number"])
+                            fullname=values["phone_number"], latest_ip=flask.request.environ.get('HTTP_X_FORWARDED_FOR', flask.request.remote_addr),
+                            balance=100)
 
             db.session.add(new_user)
             db.session.commit()
@@ -663,11 +699,93 @@ def register():
             referrer_id = flask.request.cookies.get("referrer")
 
             if len(referrer_id) > 3:
-                new_referrer = LoginSession(ip_address=referrer_id, user_agent=new_user.id)
+                new_referrer = Referral(id=str(uuid4()), referrer=referrer_id, referred_account=new_user.id)
                 db.session.add(new_referrer)
                 db.session.commit()
 
+            login_user(new_user, remember=True)
             return reason
+
+
+@app.route("/plutus/choose")
+@login_required
+def choose_account_plutus():
+    accounts = []
+    for i in flask.request.cookies.keys():
+        if "user_cookie" in i:
+            try:
+                accounts.append({"username": i.split("&&")[1], "password": flask.request.cookies.get(i),
+                                 "email": User.query.filter_by(username=i.split("&&")[1]).first().email})
+            except AttributeError:
+                resp = flask.make_response(flask.redirect("/"))
+                resp.delete_cookie(i)
+                return resp
+    return flask.render_template("account/plutus_connect.html", accounts=accounts)
+
+
+@app.route("/plutus/connect/<username>/<password>")
+def plutus_connect(username, password):
+    logout_user()
+    user_login = User.query.filter_by(username=username).first()
+
+    if bcrypt.check_password_hash(user_login.password, password):
+        user_login.latest_ip = flask.request.environ.get('HTTP_X_FORWARDED_FOR', flask.request.remote_addr)
+        db.session.commit()
+        login_user(user_login, remember=True)
+        return flask.redirect("/plutus/connect/option")
+
+    return flask.redirect("/")
+
+
+@app.route("/plutus/connect/option", methods=["POST", "GET"])
+@login_required
+def plutus_connect_option():
+    if flask.request.method == "POST":
+        try:
+            if flask.request.values["convert_tokens"]:
+                data_payload = {
+                    "username": current_user.username,
+                    "email": current_user.email,
+                    "password": current_user.password,
+                    "ga_balance": current_user.balance,
+                    "latest_ip": current_user.latest_ip,
+                    "secret_key": app.config["SECRET_KEY"]
+                }
+                current_user.balance = 0
+                db.session.commit()
+                requests.post("https://plutus.grandassembly.net/ga_connect", data=data_payload)
+            else:
+                data_payload = {
+                    "username": current_user.username,
+                    "email": current_user.email,
+                    "password": current_user.password,
+                    "ga_balance": 0,
+                    "latest_ip": current_user.latest_ip,
+                    "secret_key": app.config["SECRET_KEY"]
+                }
+                requests.post("https://plutus.grandassembly.net/ga_connect", data=data_payload)
+        except:
+            data_payload = {
+                "username": current_user.username,
+                "email": current_user.email,
+                "password": current_user.password,
+                "ga_balance": 0,
+                "latest_ip": current_user.latest_ip,
+                "secret_key": app.config["SECRET_KEY"]
+            }
+            requests.post("https://plutus.grandassembly.net/ga_connect", data=data_payload)
+    return flask.render_template("account/plutus_option.html", user=current_user)
+
+
+@app.route("/delete_post/<post_id>")
+@login_required
+def delete_post_user(post_id):
+    post_to_delete = Post.query.get(post_id)
+    if post_to_delete.creator_fk == current_user.id or current_user.is_admin:
+        db.session.delete(post_to_delete)
+        db.session.commit()
+
+    return flask.redirect("/")
 
 
 @app.route("/account/login", methods=["POST", "GET"])
@@ -677,6 +795,8 @@ def login():
         user_login = User.query.filter_by(username=values["username"]).first()
 
         if bcrypt.check_password_hash(user_login.password, values["password"]):
+            user_login.latest_ip = flask.request.environ.get('HTTP_X_FORWARDED_FOR', flask.request.remote_addr)
+            db.session.commit()
             login_user(user_login, remember=True)
             resp = flask.make_response(flask.redirect("/"))
             expire_date = datetime.now()
@@ -709,6 +829,8 @@ def change_account(username, password):
     user_login = User.query.filter_by(username=username).first()
 
     if bcrypt.check_password_hash(user_login.password, password):
+        user_login.latest_ip = flask.request.environ.get('HTTP_X_FORWARDED_FOR', flask.request.remote_addr)
+        db.session.commit()
         login_user(user_login, remember=True)
         return flask.redirect("/")
 
@@ -887,7 +1009,9 @@ def load_post_batch_authenticated(paginate):
             "text_body": " ".join(i.text_body.split(" ")[:15]).replace("&newline&", ""),
             "has_image": True if i.image_uri else False,
             "image_uri": i.image_uri,
-            "creator_username": User.query.get(i.creator_fk).username + " - Sponsorlu" if i.id in [ad.id for ad in relevant_ads] else User.query.get(i.creator_fk).username,
+            "creator_username": User.query.get(i.creator_fk).username + " - Sponsorlu" if i.id in [ad.id for ad in
+                                                                                                   relevant_ads] else User.query.get(
+                i.creator_fk).username,
             "net_votes": i.net_votes,
             "post_id": i.id,
             "is_video": False if not i.image_uri else "&video&" in i.image_uri,
@@ -961,10 +1085,21 @@ def new_post():
                 except IndexError:
                     continue
             db.session.add(new_test)
+        elif values.get("add_list"):
+            for i in values["questions"].split("&&&&"):
+                try:
+                    if len(i.split("&&&")[0]) < 3:
+                        continue
+                    new_entry = ListPoint(id=str(uuid4()), text_body=i.split("&&&")[0], post_fk=new_post_add.id)
 
-            db.session.add(new_test)
-        if values.get("add_poll", False):
-            new_test = Test(id="poll-"+str(uuid4()), outcomes=values["outcomes_and_points"], post_fk=new_post_add.id)
+                    q_file = all_files[new_entry.text_body]
+                    q_file.save("file_content/" + new_entry.id)
+
+                    db.session.add(new_entry)
+                except IndexError:
+                    continue
+        elif values.get("add_poll", False):
+            new_test = Test(id="poll-" + str(uuid4()), outcomes=values["outcomes_and_points"], post_fk=new_post_add.id)
             for i in values["questions"].split("&&&&"):
                 try:
                     new_question = Question(id=str(uuid4()), question_body=i.split("&&&")[0],
@@ -977,10 +1112,10 @@ def new_post():
                 except IndexError:
                     continue
 
-                db.session.add(new_test)
+            db.session.add(new_test)
         elif values.get("add_tok_poll", False):
             new_test = Test(id="poll-" + str(uuid4()), outcomes=values["outcomes_and_points"],
-                            post_fk=new_post_add.id, is_poll_bet=True, end_date=datetime.today()+timedelta(days=3))
+                            post_fk=new_post_add.id, is_poll_bet=True, end_date=datetime.today() + timedelta(days=3))
             for i in values["questions"].split("&&&&"):
                 try:
                     new_question = Question(id=str(uuid4()), question_body=i.split("&&&")[0],
@@ -1088,15 +1223,30 @@ def advertise(post_id):
     return flask.render_template("advertising/new_advert.html", post=Post.query.get(post_id))
 
 
+@app.route("/report/<post_id>", methods=["POST", "GET"])
+@login_required
+def report_post(post_id):
+    if flask.request.method == "POST":
+        new_mail = Message("Yeni Raporlama | GrandAssembly", sender="no-reply@grandassembly.net",
+                           recipients=["omer.ozhan@grandassembly.net"])
+        new_mail.body = f"@{current_user.username}, {Post.query.get(post_id).title} başlıklı içeriği şikayet etti. " \
+                        f"https://grandassembly.net/p/{post_id} | Gerekçe: {flask.request.values['report_reason']}"
+        mail.send(new_mail)
+
+        return flask.redirect("/")
+
+    return flask.render_template("posts/report_post.html")
+
+
 @app.route("/view-post/<post_id>", methods=["POST", "GET"])
 def view_post(post_id):
     view_count = ""
     post_analytics = PostAnalytics.query.filter_by(post_fk=post_id).first()
     if post_analytics and current_user.is_authenticated:
-        new_view = LoginSession(id=str(uuid4()), ip_address=current_user.id, user_agent=post_id)
+        new_view = PostView(id=str(uuid4()), viewer_fk=current_user.id, post_fk=post_id)
 
-        if current_user.did_verify_phone_number and \
-                len(LoginSession.query.filter_by(user_agent=post_id).filter_by(ip_address=current_user.id).all()) < 1:
+        if True and \
+                len(PostView.query.filter_by(post_fk=post_id).filter_by(viewer_fk=current_user.id).all()) < 1:
             views_tmp = int(post_analytics.views)
             post_analytics.views = str(views_tmp + 1)
             if not (views_tmp + 1) == 0 and (views_tmp + 1) % 5 == 0:
@@ -1133,7 +1283,6 @@ def view_post(post_id):
     qq_safe = []
     outcomes = {}
     if test:
-        from os.path import exists
         for outcome in test.outcomes.split("&&&"):
             try:
                 outcomes[outcome.split("&&")[1]] = outcome.split("&&")[0]
@@ -1157,7 +1306,7 @@ def view_post(post_id):
                     is_interactive_story = True
 
                     for opt in options:
-                        opt["value"] = str(int(opt["value"].replace("q:", ""))-1)
+                        opt["value"] = str(int(opt["value"].replace("q:", "")) - 1)
 
                     break
 
@@ -1201,9 +1350,19 @@ def view_post(post_id):
         "tok_poll": test_bet,
         "date_delta": date_delta
     }
+
+    can_delete_post = post_query.creator_fk == current_user.id or current_user.is_admin
+
+    post_list = [{
+        "text_body": i.text_body,
+        "object_id": i.id,
+        "has_image": exists("file_content/" + i.id),
+    } for i in ListPoint.query.filter_by(post_fk=post_id).all()]
+
     creator = User.query.get(post_query.creator_fk)
     if current_user.is_authenticated:
-        user_followed = FollowUser.query.filter_by(follower_fk=current_user.id).filter_by(followed_fk=creator.id).first() is not None
+        user_followed = FollowUser.query.filter_by(follower_fk=current_user.id).filter_by(
+            followed_fk=creator.id).first() is not None
     else:
         user_followed = False
     is_verified = True if Compliant.query.filter_by(
@@ -1211,8 +1370,11 @@ def view_post(post_id):
 
     return flask.render_template("posts/post_view.html", post=post, user=current_user, user_followed=user_followed,
                                  is_authenticated=current_user.is_authenticated, is_poll=is_poll, creator=creator,
-                                 comments=Comment.query.filter_by(post_fk=post_id), is_verified=is_verified, qq_safe=qq_safe,
-                                 view_count=view_count, questions=questions, outcomes=outcomes, questions_exist=len(questions)>0)
+                                 post_list=post_list,
+                                 comments=Comment.query.filter_by(post_fk=post_id), is_verified=is_verified,
+                                 qq_safe=qq_safe,
+                                 view_count=view_count, questions=questions, outcomes=outcomes,
+                                 questions_exist=len(questions) > 0, can_delete_post=can_delete_post)
 
 
 # To do: Add timed betting to polls
@@ -1390,18 +1552,34 @@ def verify_sms():
             supply = Supply.query.first()
             supply.total_supply += 500
 
-            get_affiliate = LoginSession.query.filter_by(user_agent=current_user.id).first()
+            get_affiliate = Referral.query.filter_by(referred_account=current_user.id).first()
             if get_affiliate:
-                User.query.filter_by(username=get_affiliate.ip_address).first().balance += 500
+
+                if current_user.latest_ip == User.query.filter_by(username=get_affiliate.referrer).first().latest_ip:
+                    notify_referrer = Notification(notification_head="Öneriniz Geçersiz",
+                                                   notification_body="Kendi kendinize öneride bulunamazsınız.",
+                                                   is_read=False, onclick_link="/", user_fk=User.query.filter_by(username=get_affiliate.referrer).first().id,
+                                                   id=str(uuid4()))
+                    db.session.add(notify_referrer)
+                    db.session.commit()
+                else:
+                    notify_referrer = Notification(notification_head="Teşekkürler!",
+                                                   notification_body="Öneri linkiniz ile kayıt olan bir hesap email "
+                                                                     "adresini doğruladı! 25₺ değerinde token kazandınız.",
+                                                   is_read=False, onclick_link="/", user_fk=User.query.filter_by(username=get_affiliate.referrer).first().id,
+                                                   id=str(uuid4()))
+                    db.session.add(notify_referrer)
+                    User.query.filter_by(username=get_affiliate.referrer).first().balance += 500
 
             db.session.commit()
+            return flask.redirect("/")
 
     new_authentication = AuthenticationSMS(id=str(uuid4()), user_fk=current_user.id,
                                            sms_code=random.randint(999999, 9999999))
     db.session.add(new_authentication)
     db.session.commit()
 
-    new_mail = Message("GrandAssembly onay kodunuz.", sender="omer.ozhan@grandassembly.net",
+    new_mail = Message("GrandAssembly onay kodunuz.", sender="no-reply@grandassembly.net",
                        recipients=[current_user.email])
     new_mail.html = generate_email("verification_code", new_authentication.sms_code)
     mail.send(new_mail)

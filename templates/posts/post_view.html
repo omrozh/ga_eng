@@ -31,17 +31,22 @@
   <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
     <style>
         button[name="question-choice"]{
-            width: 100%; background-color: white; border: 1px solid gray; border-radius: 15px; min-height: 50px; margin-top: 10px;
+            width: 100%; background-color: #171f2a; border: 1px solid gray; border-radius: 15px; min-height: 50px; margin-top: 10px;
             font-size: 20px;
+            padding: 15px;
+            color: white;
         }
 
         button[name="question-choice"]:hover{
-            background-color: rgb(150, 150, 150);
-            color: white;
+            background-color: #001d25;
         }
         .tooltip {
           position: relative;
           display: inline-block;
+        }
+
+        p{
+            font: 400 16px/1.375 "Open Sans",sans-serif
         }
 
         .tooltip .tooltiptext {
@@ -78,7 +83,7 @@
         }
     </style>
 </head>
-<body style="padding-bottom: 50px; background-color: white">
+<body style="padding-bottom: 50px; background-color: #171f2a">
   <div class="header-main" style="z-index: 99">
       <img src="/static/grandassembly.png" onclick="document.location = '/'" id="assembly-logo" alt="">
       <span style="float: left; margin-top: 15px" onclick="document.location = '/'">GrandAssembly</span></div>
@@ -116,7 +121,7 @@
   <br>
   <br>
   {% if is_authenticated %}
-  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: white; padding: 15px; z-index: 99" id="bottom-menu">
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: #171f2a; padding: 15px; z-index: 99" id="bottom-menu">
         <span>@{{ user.username }}</span>
         <p style="color: gray" class="user-balance">{{ user.balance }} GAT</p>
       <i style="position: fixed; right: 75px; bottom: 40px; font-size: 2rem" onclick="document.location = '/whats-popular'" class="fa-solid fa-hashtag"></i>
@@ -125,9 +130,9 @@
   {% endif %}
   <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
       <div style="position: relative; top: 20px; float: right; margin-right: 15px">
-          <i onclick="dv()" style="font-size: 1.5rem; margin-right: 10px" class="fa-regular fa-face-smile"></i>
+          <i onclick="dv()" style="font-size: 1.5rem; margin-right: 10px" class="fa-regular fa-arrow-trend-up"></i>
           <span id="net-votes">{{ post.net_votes }}</span>
-            <i style="margin-left: 10px; font-size: 1.5rem" onclick="hv()" class="fa-regular fa-face-frown"></i>
+            <i style="margin-left: 10px; font-size: 1.5rem" onclick="hv()" class="fa-regular fa-arrow-trend-down"></i>
       </div>
         <p style="color: gray"><span onclick="document.location = '/account/{{ post.creator_username }}'">@{{ post.creator_username }}</span>
         {% if is_verified %}
@@ -153,6 +158,12 @@
       <br>
       <hr>
       <p style="color:gray;">{{ post.date_delta }}</p>
+      {% for list_point in post_list %}
+        {% if list_point.has_image %}
+            <img src="/file_content/{{ list_point.object_id }}" style="width: 100%" alt="">
+        {% endif %}
+        <p>{{ list_point.text_body }}</p>
+      {% endfor %}
       {% for j in questions %}
         <div class="qq-ind">
             {% if not post.tok_poll %}
@@ -192,6 +203,10 @@
           <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
         <i onmouseout="outFunc()" style="font-size: 1.5rem" onclick="shareURLInPage()" class="fa-solid fa-link"></i>
       </div>
+      <i style="font-size: 1.5rem; margin-left: 15px" onclick="document.location = '/report/{{ post.post_id }}'" class="fa-solid fa-flag"></i>
+      {% if can_delete_post %}
+        <i style="font-size: 1.5rem; margin-left: 15px" onclick="document.location = '/delete_post/{{ post.post_id }}'" class="fa-solid fa-trash"></i>
+      {% endif %}
       {% if questions_exist %}
           {% if questions.0.is_interactive_story %}
             <script>
@@ -408,7 +423,7 @@
       <br>
       <br>
       <form method="post" enctype="multipart/form-data">
-          <textarea onkeyup="adjustHeight(this)" type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); outline: none; width: 90%; font-size: 1rem; resize: none" name="comment" id="comment-inp" placeholder="Yorum"></textarea>
+          <textarea onkeyup="adjustHeight(this)" type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); background-color: #171f2a; color: white; outline: none; width: 90%; font-size: 1rem; resize: none" name="comment" id="comment-inp" placeholder="Yorum"></textarea>
           <br>
           <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px" onclick="document.location = '/follow-tag/{{ tag_name }}'" class="button-main-register">Paylaş</button>
       </form>
@@ -416,7 +431,7 @@
       {% for i in comments %}
           <div style="border: 1px solid #e3e3e3; border-radius: 5px; padding-left: 15px; padding-right: 15px; margin-top: 10px" class="com-div">
             <p style="color: #888888; font-size: 12px">{{ i.commenter }}</p>
-            <p class="comment-c" style="color: black; font-size: 1rem">{{ i.content }}</p>
+            <p class="comment-c" style="color: white; font-size: 1rem; word-break: break-all;">{{ i.content }}</p>
           </div>
       {% endfor %}
   </div>

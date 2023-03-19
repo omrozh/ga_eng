@@ -48,9 +48,17 @@
       float: left;
       margin-left: 100px
     }
+    #ai-rewrite{
+      bottom: 50px; right: 50px;
+      float: right; padding: 10px;
+    }
     @media only screen and (max-width: 1000px) {
       #ai-rewrite{
-        display: none;
+        top: 50px;
+        bottom: auto;
+        width: 70%;
+        float: none;
+        left: 15%;
       }
       .check-div{
         margin-left: 0;
@@ -58,9 +66,9 @@
     }
   </style>
 </head>
-  <body>
-  <button type="button" id="ai-rewrite" style="float: right; background-color: dodgerblue; border: none; outline: none; color: white; padding: 10px; position:fixed; bottom: 50px; right: 50px" onclick="aiAssist()">Yapay Zekaya Yazdır</button>
-  <div class="header-main">
+  <body style="background-color: #171f2a">
+  <button type="button" id="ai-rewrite" style="background-color: dodgerblue; border: none; outline: none; color: white; position:fixed;" onclick="aiAssist()">Yapay Zekaya Yazdır</button>
+  <div class="header-main" style="border: none">
       <img src="/static/grandassembly.png" style="margin-left: 5vw" id="assembly-logo" alt="">
       <span style="float: left; margin-top: 14px" onclick="document.location = '/'">GrandAssembly</span></div>
   <div id="wrapper">
@@ -76,7 +84,8 @@
       <br>
       <div>
         <div class="item">
-        <div style="float: left">
+        <div id="checks">
+          <div style="float: left">
           <div class="checkbox-rect">
           <input type="checkbox" id="checkbox-rect1" name="add_test">
           <label onclick="addTest()" for="checkbox-rect1" style="margin-top: 25px; color: white">Test Ekle</label>
@@ -100,6 +109,13 @@
               <label onclick="addPoll()" for="checkbox-id-4" style="margin-top: 25px; color: white">Tokenli Anket Ekle</label>
             </div>
           </div>
+          <div class="check-div">
+            <div class="checkbox-rect">
+              <input type="checkbox" id="checkbox-id-5" name="add_list">
+              <label onclick="addList()" for="checkbox-id-5" style="margin-top: 25px; color: white">Liste Ekle</label>
+            </div>
+          </div>
+        </div>
           <br style="clear: both">
           <br>
 
@@ -160,7 +176,11 @@
         let prev_val = current_editor.value
         current_editor.value = "Lütfen Bekleyin..."
       }
+      function adjustHeight(el){
+            el.style.height = (el.scrollHeight > el.clientHeight) ? (el.scrollHeight)+"px" : "60px";
+        }
       function addTestInteractive(){
+          document.getElementById("checks").style.display = "none"
           if(document.getElementById("test-settings").style.display === "block"){
             document.getElementById("test-settings").style.display = "none"
           }
@@ -209,6 +229,7 @@
   </script>
   <script>
             function addTest(){
+              document.getElementById("checks").style.display = "none"
               if(document.getElementById("test-settings").style.display === "block"){
                 document.getElementById("test-settings").style.display = "none"
               }
@@ -223,6 +244,20 @@
               addTest()
               document.getElementById("out-btn").style.display = "none";
               document.getElementById("question-add-button").onclick = createQuestionPoll;
+            }
+            function addList(){
+              addTest()
+              document.getElementById("out-btn").style.display = "none";
+              document.getElementById("question-add-button").onclick = addListPoint;
+              document.getElementById("question-add-button").innerText = "Öğe Ekle"
+            }
+            function addListPoint(){
+              window.question_index += 1
+              let question = `<div id="question-${window.question_index}"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Öğeye Görsel Ekle</label><input onchange="this.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><br><textarea onkeyup="adjustHeight(this)" oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" name="question_add" class="text-form-input" style="resize: none; width: 90%; margin-top: 50px; font-size: 12px; padding: 15px" placeholder="İçerik"></textarea><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px; display: none" type="text" oninput="window.active_elem = this;" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" type="text" placeholder="Puanı" value="1" name="text-answer-val-a-q-${window.question_index}"></div><button class="btn btn-primary" style="background-color: #e86b5a; display: none" type="button" onclick="addOptionPoll(${window.question_index})">Şık Ekle</button><div>`
+              let new_question = document.createElement("div")
+              new_question.innerHTML = question
+              document.getElementById("out-btn").style.display = "none"
+              document.getElementById("insert-questions-div").appendChild(new_question)
             }
             window.question_index = 0
             function createQuestionPoll(){

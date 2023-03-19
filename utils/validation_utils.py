@@ -30,25 +30,22 @@ def validate_form_submit(values, user_obj):
         return False, "Email tanınamadı, lütfen kişisel bir email adresi tercih edin."
 
     if not values["email"] or not values["username"] or not values["password"] or not values["phone_number"]:
-        return False, "Missing Values"
+        return False, "Eksik Alanlar"
 
     if len(values["password"]) < 6:
-        return False, "Password too short"
+        return False, "Şifre çok kısa"
 
     if len(values["username"]) < 3:
-        return False, "Username too short"
+        return False, "Kullanıcı adı çok kısa"
 
     if len(values["username"]) > 128:
-        return False, "Username too long"
+        return False, "Kullanıcı adı çok uzun"
 
     if values["email"] in [i.email for i in user_obj.query.filter_by(email=values["email"]).all()]:
-        return False, "Email Used"
+        return False, "Email kullanılıyor"
 
     if values["username"] in [i.username for i in user_obj.query.filter_by(username=values["username"]).all()]:
-        return False, "Username Used"
-
-    if values["phone_number"] in [i.phone_number for i in user_obj.query.filter_by(phone_number=values["phone_number"]).all()]:
-        return False, "Phone Number Used"
+        return False, "Kullanıcı adı alınmış"
 
     return True, "Registered"
 

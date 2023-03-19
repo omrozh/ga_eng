@@ -7,6 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GrandAssembly | Join the democratisation</title>
     <link rel="stylesheet" href="/styles/account/index.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X7F5L20ZE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-5X7F5L20ZE');
+    </script>
     <style>
         body{
             font-family: "Open Sans";
@@ -32,6 +40,12 @@
             font-size: 1.5rem;
             max-width: 90vw;
         }
+        .logo-form{
+            display: none;
+        }
+        .center-div-form {
+            border: none;
+        }
         @media only screen and (max-width: 1100px) {
             .center-div-form {
                 left: 0;
@@ -42,13 +56,17 @@
             .local-info{
                 display: none;
             }
+
+            .bottom-info{
+                display: none;
+            }
+            .logo-form{
+                display: block;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="center-div-join">
-        <h2 class="slogan-header">Düşüncelerini <span id="slogan-word"> sansür </span>olmadan paylaş.</h2>
-    </div>
     <div class="local-info">
         <img src="/static/grandassembly.png" style="width: 100px" alt="">
         <h1>GrandAssembly</h1>
@@ -60,35 +78,42 @@
         </div>
         <br>
         <div id="form-inputs-1">
+            <img src="/static/grandassembly.png" style="width: 50px" class="logo-form" alt="">
+            <br>
             <div class="group">
-                 <label style="font-family: 'Open Sans'">Username</label>
+                 <label style="font-family: 'Open Sans'">Kullanıcı Adı</label>
                  <input type="username" id="username" class="text-form-input">
             </div>
             <br>
             <div class="group">
-                 <label style="font-family: 'Open Sans'">Password</label>
-                 <input type="password" id="password" class="text-form-input">
-            </div>
-        </div>
-        <div id="form-inputs-2" style="display: none">
-            <div class="group">
              <label style="font-family: Roboto">Email</label>
              <input type="text" id="email" class="text-form-input">
             </div>
+        </div>
+        <br>
+        <div id="form-inputs-2">
+            <div class="group">
+                 <label style="font-family: 'Open Sans'">Şifre</label>
+                 <input type="password" id="password" class="text-form-input">
+            </div>
             <br>
             <div class="group">
-             <label style="font-family: Roboto">Telefon Numarası</label>
-             <input type="text" id="phone_number" class="text-form-input" placeholder="5xxxxxxxxx">
+             <label style="font-family: 'Open Sans'">Gerçek İsminiz</label>
+             <input type="text" id="phone_number" class="text-form-input">
             </div>
         </div>
         <br>
-        <button onclick="proceedRegistration()" class="button-main-register">CONTINUE</button>
+        <button onclick="proceedRegistration()" class="button-main-register">Kaydol</button>
         <p style="font-family: Verdana">Hesabın zaten var mı? <a href="/account/login" style="color: dodgerblue">Giriş Yap!</a></p>
     </div>
     <script src="/scripts/account/change-text.js"></script>
     <script src="/scripts/account/register-actions.js"></script>
-    <center style="color: gray; position: absolute; bottom: 50px; left: 0; right: 0; width: fit-content; margin: auto">
+    <center class="bottom-info" style="color: gray; position: absolute; bottom: 50px; left: 0; right: 0; width: fit-content; margin: auto">
         <p>Infinity Software Holdings, LLC. 2023</p>
+        <a href="" style="color: gray">Contact Us</a>
+        <a href="" style="color: gray; margin-left: 15px">Terms of Service</a>
+        <a href="" style="color: gray; margin-left: 15px">About Us</a>
+        <a href="" style="color: gray; margin-left: 15px">Privacy Policy</a>
     </center>
 </body>
 </html>
