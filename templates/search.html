@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/scripts/home/utils.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <title>GrandAssembly | Search Results</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X7F5L20ZE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-5X7F5L20ZE');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9607757152749129"
+     crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+        body {
+            background: #171f2a;
+            margin: 0;
+            padding: 0;
+            font-family: "Open Sans";
+            color: white;
+        }
+
+        h1{
+            cursor: pointer;
+        }
+
+        #search-input{
+            width: 40%;background-color: #eaeaea;color: #888888;padding: 5px;border: 1px solid #171f2a;outline: none;border-radius: 100px;height: 1.5rem;text-indent: 1.5rem;margin: 6px;margin-left: 30vw;margin-top: 20px; position: relative; z-index: 9999
+        }
+
+        .news-feed {
+            width: 600px;
+            min-height: 250px;
+            background: #171f2a;
+            margin: 10px auto 0;
+            padding: 10px;
+            border-top: 1px solid rgb(220, 220, 220)
+        }
+
+        .side-menu {
+            width: 25vw;
+            position: fixed;
+            height: 100vh;
+            background-color: #171f2a;
+            top: 0;
+            border-right: 1px solid rgb(220, 220, 220);
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .header-main{
+            border-bottom: 1px solid #d0cfcf;
+            width: 100vw;
+            height: 75px;
+            background-color: #171f2a;
+            right: 0;
+            position: fixed;
+            top: 0;
+        }
+
+        #assembly-logo{
+            width: 50px;
+            margin-left: 3vw;
+            float: left
+        }
+
+        #bottom-menu{
+            display: none;
+        }
+
+        #logo-div{
+            display: none;
+        }
+
+
+        .p-view-img{
+            margin-top: 8%; margin-left: 330px;
+        }
+
+        @media only screen and (max-width: 1250px) {
+            #logo-div{
+                display: block;
+            }
+            #search-input{
+                margin-left: 15px;
+            }
+            .header-main{
+                width: 100vw;
+            }
+            .side-menu{
+                display: none;
+            }
+            .news-feed{
+                width: 90%;
+            }
+            #assembly-logo{
+                margin-left: 5vw;
+            }
+            #bottom-menu{
+                display: block;
+            }
+            .p-view-img{
+                clear: both;
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        li{
+            list-style-type: none;
+            margin-top: 5px;
+            max-width: 90%;
+        }
+
+        .fa-rocket:hover{
+            color: dodgerblue;
+        }
+        .fa-fire-flame-simple:hover{
+            color: coral;
+        }
+
+        i{
+            color: gray;
+        }
+        li:hover{
+            cursor: pointer;
+        }
+        .option-button{
+          color: #1A1A1B; background-color: #F6F7F8; border: none; border-radius: 50px; padding: 15px; font-size: 1rem
+        }
+        .option-button:hover{
+          background-color: #bdbcbc;
+        }
+    </style>
+  <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
+</head>
+<body style="padding-bottom: 100px">
+       <div class="header-main" style="z-index: 99;">
+           {% if user.is_authenticated %}
+            {% if not user.did_verify_phone_number %}
+           <script>
+               document.getElementsByClassName("header-main")[0].style.height = "95px"
+               function close_alert(){
+                   document.getElementById('verify_number_alert').style.display = 'none';
+                   document.getElementsByClassName('header-main')[0].style.height = '70px'
+                   document.getElementById("accounts").style.top = "15px"
+               }
+           </script>
+                <center id="verify_number_alert" style="color: white; background-color: red; width: 100%; margin-top: 0; padding-top: 5px; padding-bottom: 5px"><a href="/verify_sms" style="color: white">Emailini onayla</a> 500 token kazan. <span style="text-decoration: underline; margin-left: 25px" onclick="close_alert()">Kapat</span></center>
+            {% endif %}
+           {% endif %}
+	<div id="logo-div">
+	        <img src="/static/grandassembly.png" onclick="document.location = '/'" id="assembly-logo" alt="" style="margin-top: 10px">
+        </div>
+	<input id="search-input" value="{{ search_query }}" onchange="document.location = '/search_query?query=' + this.value" placeholder="Arama Yap" style="border-bottom: 1px solid; background-color: transparent; color: white; border-image: linear-gradient(to right, #4285F4 25%, #DB4437 25%, #F4B400 50%,#0F9D58 50%, #0F9D58 75%, #F4B400 75%) 5; border-left: none; border-right: none; border-top: none;" type="text">
+       </div>
+	<div style="z-index: 9999; position: relative">
+            {% if not user.is_authenticated %}
+                <button style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/login'" class="">Giriş Yap</button>
+            {% else %}
+                <button id="accounts" style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/choose'" class="">Hesaplar</button>            {% endif %}
+        </div>
+           {% if user.is_authenticated %}
+            {% if not user.did_verify_phone_number %}
+           <script>
+               document.getElementById("accounts").style.top = "40px"
+               document.getElementById("search-input").style.marginTop = "13px"
+           </script>
+            {% endif %}
+           {% endif %}
+         <div class="news-feed load-more" style="padding-left: 15px; min-height: fit-content; border: none; background: transparent; margin-top: 85px; overflow-x: scroll">
+             <div style="width: 1000px">
+                 <button class="option-button" onclick="switchSearch('content', this)" style="background-color: dodgerblue; color: white">İçerik</button>
+                <button class="option-button" onclick="switchSearch('users', this)">Kişiler</button>
+                 <button class="option-button" onclick="switchSearch('tags', this)">Tagler</button>
+                 <button class="option-button" onclick="switchSearch('ai', this)">Yapay Zekaya Sor(GPT-3.5)</button>
+                 <button class="option-button" onclick="switchSearch('ai', this, true)">Yapay Zekaya Sor(GAIA)</button>
+                 <button class="option-button" onclick="switchSearch('internet', this)">İnternette Ara</button>
+                 <button class="option-button" onclick="switchSearch('images', this)">Görseller</button>
+             </div>
+         </div>
+           <script>
+               window.ai_complete = false;
+               window.ai_complete_gpt = false;
+               window.internet_complete = false;
+               window.images_complete = false;
+
+               function updateText(search_data){
+                   window.internet_complete = true;
+                   document.getElementById("internet-search-div").innerHTML = search_data
+               }
+               function updateImages(search_data){
+                   window.images_complete = true;
+                   for(let i = 0; i < search_data.length; i++) {
+                       let update_elem = `
+                       <div onclick="window.open('${search_data[i]['host_page_url']}')" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; min-height: 0; height: fit-content; max-height: 50%; padding-top: 50px; overflow: auto">
+                          <img src="${search_data[i]['img_url']}" style="border-radius: 15px; float: left; width: 300px;" alt="">
+                          <p class="p-view-img">${search_data[i]['description']}</p>
+                      </div>
+                       `
+                       document.getElementById("image-search-div").innerHTML += update_elem
+                   }
+               }
+               function internetSearch(){
+                   let current_editor = document.getElementById("search-input").value
+                   fetch('/websearch?query=' + current_editor)
+                    .then(x => x.text())
+                    .then(y => updateText(y));
+               }
+
+               function imageSearch(){
+                   let current_editor = document.getElementById("search-input").value
+                   fetch('/imagesearch?query=' + current_editor)
+                    .then(x => x.json())
+                    .then(y => updateImages(y));
+               }
+
+               function aiAssist(is_gaia){
+                let current_editor = document.getElementById("ai-answer")
+                const xhr = new XMLHttpRequest();
+                if(is_gaia){
+                    current_editor = document.getElementById("gaia-answer")
+                    document.getElementById("gaia-answer").style.display = "block"
+                    document.getElementById("ai-answer").style.display = "none"
+                    xhr.open("POST", '/gaia/search', true);
+                }else {
+                    xhr.open("POST", '/ai/search', true);
+                }
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onreadystatechange = () => {
+                  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    if(xhr.responseText === "Failed"){
+                      let ok = confirm("Bu özelliği kullanmaya henüz elverişli değilsiniz")
+                      if(ok){
+                        window.open("/ai/waitinglist")
+                      }
+                    }else{
+                      if(current_editor.id === "editor"){
+                        current_editor.innerText = prev_val + "\n" + xhr.responseText;
+                      }
+                      else{
+                        current_editor.innerText = xhr.responseText;
+                      }
+                    }
+                  }
+                  else{
+                    current_editor.innerText = "Yapay Zeka Şu Anda Çok Yoğun  - Tekrar Dene\n" + prev_val
+                  }
+                }
+                xhr.send("content=" + document.getElementById('search-input').value);
+                let prev_val = document.getElementById('search-input').value
+                current_editor.innerText = "Lütfen Bekleyin..."
+              }
+               function switchSearch(type_ind, button_ind, gaia=false){
+                   type_ind = type_ind.split("-")[0]
+                   if(gaia){
+                    document.getElementById("ai-answer").style.display = "none"
+                    document.getElementById("gaia-answer").style.display = "block"
+                   }
+                   else{
+                    document.getElementById("ai-answer").style.display = "block"
+                    document.getElementById("gaia-answer").style.display = "none"
+                   }
+                   if(type_ind === "ai" && !window.ai_complete && gaia){
+                       window.ai_complete = true;
+                       aiAssist(gaia)
+                   }
+                   if(type_ind === "ai" && !window.ai_complete_gpt && !gaia){
+                       window.ai_complete_gpt = true;
+                       aiAssist(gaia)
+                   }
+                   if(type_ind === "internet" && !window.internet_complete){
+                       window.internet_complete = true;
+                       internetSearch()
+                   }
+                   if(type_ind === "images" && !window.images_complete){
+                       window.images_complete = true;
+                       imageSearch()
+                   }
+                   let all_buttons = document.getElementsByClassName("option-button")
+                   for(let i = 0; i < all_buttons.length; i++){
+                       all_buttons[i].style.backgroundColor = "#F6F7F8"
+                       all_buttons[i].style.removeProperty("color")
+                   }
+
+                   button_ind.style.backgroundColor = "dodgerblue"
+                   button_ind.style.color = "white"
+
+                   document.getElementById("search-content").style.display = "none"
+                   document.getElementById("search-users").style.display = "none"
+                   document.getElementById("search-tags").style.display = "none"
+                   document.getElementById("search-ai").style.display = "none"
+                   document.getElementById("search-internet").style.display = "none"
+                   document.getElementById("search-images").style.display = "none"
+
+                   document.getElementById("search-" + type_ind).style.display = "block"
+               }
+           </script>
+         <div id="search-content">
+             {% if is_searchable %}
+                <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
+                  <h1>Buraya ilk başlığı siz atın.</h1>
+                  <p>Aradığınız - <strong>{{ search_query }}</strong> - ile ilgili hiçbir arama sonucu mevcut değil.</p>
+                    <br>
+                    <img src="https://grandassembly.net/file_content/ac9d4adb-c9ea-49bf-bb03-51a205aaac2e" style="width: 100%; border-radius: 15px" alt="">
+                    <br>
+                  <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 100%; margin-top: 10%" onclick="window.open('/new/post?title={{ search_query }}')" class="">Paylaş</button>
+              </div>
+             {% endif %}
+             {% for i in content_search %}
+              <div onclick="window.open('/p/{{ i.id }}')" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
+                  <div style="position: relative; top: 20px; float: right; margin-right: 15px; z-index: 0">
+                      <i style="font-size: 1.5rem; margin-right: 10px; color: gray" class="fa-solid fa-arrow-trend-up"></i>
+                      <span>{{ i.net_votes }}</span>
+                        <i style="margin-left: 10px; font-size: 1.5rem; color: gray" class="fa-solid fa-arrow-trend-down"></i>
+                  </div>
+                  <p style="color: gray">@{{ i.creator_username }}</p>
+                  <h1>{{ i.title }}</h1>
+                  <p>{{ i.text_body }}</p>
+                  {% if i.image_uri %}
+                    <img src="{{ i.image_uri }}" style="width: 100%; border-radius: 15px" alt="">
+                  {% endif %}
+                  <p style="color: gray">Devamını Oku</p>
+              </div>
+             {% endfor %}
+         </div>
+        <div id="search-ai" style="display: none">
+            <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
+              <p id="ai-answer" style="display: none">{{ i }}</p>
+                <p id="gaia-answer" style="display: none">{{ i }}</p>
+            </div>
+         </div>
+       <div id="search-internet" style="display: none">
+            <div class="news-feed load-more" id="internet-search-div" style="margin-top: 70px; padding-left: 15px;">
+            </div>
+         </div>
+       <div id="search-images" style="display: none">
+            <div class="news-feed load-more" id="image-search-div" style="margin-top: 0; padding-left: 0; border: none">
+            </div>
+         </div>
+           <div id="search-users" style="display: none">
+             {% for i in similar_users %}
+              <div onclick="window.open('/account/{{ i }}')" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
+                  <h1>{{ i }}</h1>
+              </div>
+             {% endfor %}
+         </div>
+           <div id="search-tags" style="display: none">
+             {% for i in tag_search %}
+              <div onclick="window.open('/tags/{{ i }}')" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px;">
+                  <h1>{{ i }}</h1>
+              </div>
+             {% endfor %}
+         </div>
+  <div class="side-menu" onclick="document.location = '/'">
+<img src="/static/grandassembly.png" id="assembly-logo" alt=""><span style="float: left; margin-top: 15px">GrandAssembly</span>
+      <h1 style="margin-left: 15px; margin-top: 100px">Trend Başlıklar</h1>
+      <hr style="width: 90%">
+      <ul id="top-headers" style="width: 80%">
+
+      </ul>
+      {% if is_authenticated %}
+      <div style="margin: 15px; position: fixed; bottom: 0px">
+          <hr style="width: 18vw">
+          <span onclick="document.location = '/account/{{ user.username }}'">@{{ user.username }}</span>
+            <br>
+            {% if not user_has_new_notification %}
+                <a href="/account/notifications" style="color: dodgerblue; text-decoration: none">Bildirimler</a>
+            {% else %}
+                <a href="/account/notifications" style="color: indianred; text-decoration: none">Bildirimler</a>
+            {% endif %}
+            <p style="color: gray; margin-top: 0">{{ user.balance }}</p>
+            <button style="position: fixed; left: 15vw; bottom: 50px; font-size: 1rem; margin-top: 5px;  color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/trading'">Token Al</button>
+      </div>
+      {% endif %}
+  </div>
+  <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
+      <h1 style="margin-left: 15px; margin-top: 100px">Trend Tagler</h1>
+      <hr style="width: 90%">
+      <ul id="tags-trending">
+      </ul>
+      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Paylaş</button>
+        {% if highlights_exist %}
+            <p style="color: gray; margin-top: 20px; margin-left: 5%">Takip Ettiğiniz Hesaplardan Öneriler</p>
+            <div style="width: 90%; display: inline-block; margin-left: 5%; margin-top: 25px; max-height: 90px; overflow-y: auto;">
+                  {% for i in highlights %}
+                    <strong style="color: white; text-decoration: underline" onclick="document.location = '/view-post/{{ i.post_id }}'">{{ i.post_title }}</strong>
+                    <p style="color: gray">@{{ i.creator_username }}</p>
+                  {% endfor %}
+              </div>
+           {% endif %}
+  </div>
+<div id="search-results" class="news-feed" style="display: none">
+</div>
+  <br>
+  <br>
+  {% if is_authenticated %}
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: #171f2a; padding: 15px; z-index: 99" id="bottom-menu">
+        <span onclick="document.location = '/account/{{ user.username }}'">@{{ user.username }}</span>
+        <br>
+        {% if not user_has_new_notification %}
+            <a href="/account/notifications" style="color: dodgerblue; text-decoration: none">Bildirimler</a>
+        {% else %}
+            <a href="/account/notifications" style="color: indianred; text-decoration: none">Bildirimler</a>
+        {% endif %}
+        <p style="color: gray; margin-top: 0">{{ user.balance }}</p>
+      <i style="position: fixed; right: 75px; bottom: 40px; font-size: 2rem" onclick="document.location = '/whats-popular'" class="fa-solid fa-hashtag"></i>
+        <i style="position: fixed; right: 10px; bottom: 40px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+  </div>
+  {% endif %}
+  <script>
+      getTrendingTags()
+      getPostsTopPosts()
+  </script>
+</body>
+</html>

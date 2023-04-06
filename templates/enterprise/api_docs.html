@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GAIA, API Documentation</title>
+    <link rel="stylesheet" href="/styles/home/index.css">
+</head>
+<body>
+  <div class="header-main" style="z-index: 99">
+      <img src="/static/grandassembly.png" style="margin-left: 3%" onclick="document.location = '/'" id="assembly-logo" alt="">
+      <span style="float: left; margin-top: 15px" onclick="document.location = '/'">GrandAssembly</span></div>
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
+    <h1>GAIA API Dokümantasyonuna Hoşgeldiniz.</h1>
+    <p>Bu dokümantasyon ile GAIA ile nasıl özel karaktere sahip bir Yapay Zeka modeli oluşturup kullanabileceğinizi tanıtacağız.</p>
+  </div>
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none;">
+    <h2>GAIA Karakter Modeli Oluşturma</h2>
+    <p>/api/train</p>
+    <p style="background-color: #0F9D58; width: fit-content; padding: 5px; border-radius: 5px">POST</p>
+    <p>Buraya yollayacağınız bir request ile GAIA bir GAIA modeli oluşturabilirsiniz.</p>
+    <h3>Request Formatı</h3>
+    <p>
+      {
+      <br>
+        &emsp;"character_description": "type:string",
+      <br>
+        &emsp;"api_key": "type:string"
+      <br>
+      }
+    </p>
+    <h3>Yanıt Formatı</h3>
+    <p>
+      {
+      <br>
+        &emsp;"character_id": "type:string",
+      <br>
+      }
+    </p>
+  </div>
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none;">
+    <h2>GAIA Oluşturulan Karakter Modeline Prompt Yazdırma</h2>
+    <p>/api/generate</p>
+    <p style="background-color: #0F9D58; width: fit-content; padding: 5px; border-radius: 5px">POST</p>
+    <p>Buraya yollayacağınız bir request ile oluşturduğunuz modele prompt yazdırabilirsiniz.</p>
+    <h3>Request Formatı</h3>
+    <p>
+      {
+      <br>
+        &emsp;"character_id": "type:string",
+      <br>
+        &emsp;"api_key": "type:string"
+      <br>
+        &emsp;"prompt": "type:string",
+      <br>
+      }
+    </p>
+    <h3>Yanıt Formatı</h3>
+    <p>
+      {
+      <br>
+        &emsp;"response": "type:string",
+      <br>
+        &emsp;"token_cost": "type:integer",
+      <br>
+      }
+    </p>
+  </div>
+</body>
+</html>

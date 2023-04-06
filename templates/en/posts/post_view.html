@@ -95,7 +95,7 @@
 
         </div>
   <div class="side-menu">
-      <h1 style="margin-left: 15px; margin-top: 50px">Trend Başlıklar</h1>
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Headlines</h1>
       <hr style="width: 90%">
       <ul id="top-headers">
 
@@ -111,11 +111,11 @@
       {% endif %}
   </div>
   <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
-      <h1 style="margin-left: 15px; margin-top: 50px">Trend Tagler</h1>
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Tags</h1>
       <hr style="width: 90%">
       <ul id="tags-trending">
       </ul>
-      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Paylaş</button>
+      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Share</button>
 
   </div>
   <br>
@@ -156,10 +156,10 @@
       <p id="post_body">{{ post.text_body }}</p>
       {% if post.has_chat %}
         <div style="width: 100%; height: 60vh; border-top: 1px solid white; border-bottom: 1px solid white; margin-top: 15px; margin-bottom: 15px; overflow-y: auto" id="msg-box">
-            <p style='font-size: 12px; color: gray'>{{ post.ai_name }}<p><p>Merhaba aşağıdan yazışarak benimle konuşmaya başlayabilirsin. </p>
+            <p style='font-size: 12px; color: gray'>{{ post.ai_name }}<p><p>Hi, you can start messaging me using the message box bellow. </p>
         </div>
         <div>
-            <textarea onkeyup="adjustHeight(this)" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); background-color: #171f2a; color: white; outline: none; width: 90%; font-size: 1rem; resize: none" name="comment" id="message-inp" placeholder="Mesaj"></textarea>
+            <textarea onkeyup="adjustHeight(this)" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); background-color: #171f2a; color: white; outline: none; width: 90%; font-size: 1rem; resize: none" name="comment" id="message-inp" placeholder="Message"></textarea>
               <br>
             <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px; margin-bottom: 15px" onclick="sendMessage(document.getElementById('message-inp').value)" class="button-main-register"><i style="color: white" class="fa-solid fa-paper-plane"></i></button>
         </div>
@@ -187,7 +187,7 @@
             xhr.onreadystatechange = () => {
               if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 if(xhr.responseText === "Failed"){
-                  let ok = confirm("Bu özelliği kullanmaya henüz elverişli değilsiniz")
+                  let ok = confirm("You are ineligible to use that feature")
                   if(ok){
                     window.open("/ai/waitinglist")
                   }
@@ -195,10 +195,10 @@
                     window.message_list.push(input_msg)
                     window.message_list.push(xhr.responseText)
                   if(current_editor.id === "editor"){
-                    document.getElementById(`txt-${window.txt_id_g}`).innerText = document.getElementById(`txt-${window.txt_id_g}`).innerText.replace("Yazıyor...", "") + xhr.responseText;
+                    document.getElementById(`txt-${window.txt_id_g}`).innerText = document.getElementById(`txt-${window.txt_id_g}`).innerText.replace("Typing...", "") + xhr.responseText;
                   }
                   else{
-                    document.getElementById(`txt-${window.txt_id_g}`).innerText = document.getElementById(`txt-${window.txt_id_g}`).innerText.replace("Yazıyor...", "") + xhr.responseText;
+                    document.getElementById(`txt-${window.txt_id_g}`).innerText = document.getElementById(`txt-${window.txt_id_g}`).innerText.replace("Typing...", "") + xhr.responseText;
                   }
                 }
               }
@@ -208,8 +208,8 @@
             }
             xhr.send("content=" + input_msg + "&message_list=" + window.message_list.join("##"));
             document.getElementById("message-inp").value = ""
-            current_editor.innerHTML += `<p style='font-size: 12px; color: gray'>Sen<p><p>${input_msg}</p>`
-            current_editor.innerHTML += `<p style='font-size: 12px; color: gray'>{{ post.ai_name }}<p><p id='txt-${window.txt_id_g}'>Yazıyor...</p>`;
+            current_editor.innerHTML += `<p style='font-size: 12px; color: gray'>You<p><p>${input_msg}</p>`
+            current_editor.innerHTML += `<p style='font-size: 12px; color: gray'>{{ post.ai_name }}<p><p id='txt-${window.txt_id_g}'>Typing...</p>`;
             let objDiv = document.getElementById("msg-box");
             objDiv.scrollTop = objDiv.scrollHeight;
           }
@@ -246,7 +246,7 @@
       <h2 id="points-tot" style="display: none">Total Points: 10</h2>
       <p>{{ view_count }}</p>
       {% if user.username == post.creator_username %}
-        <a style="color: dodgerblue; text-decoration: none" href="/advertise/{{ post.post_id }}">Öne Çıkar</a>
+        <a style="color: dodgerblue; text-decoration: none" href="/advertise/{{ post.post_id }}">Advertise</a>
         <br>
         <br>
       {% endif %}
@@ -314,7 +314,7 @@
                 if(outcomes[window.test_val]){
                     document.getElementById("points-tot").innerText = outcomes[window.test_val]
                 }else{
-                    document.getElementById("points-tot").innerText = "Toplam Puanınız: " + window.test_val;
+                    document.getElementById("points-tot").innerText = "Total Points: " + window.test_val;
                 }
                 document.getElementById("points-tot").style.display = "block";
               }
@@ -474,9 +474,9 @@
       <br>
       <br>
       <form method="post" enctype="multipart/form-data">
-          <textarea onkeyup="adjustHeight(this)" type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); background-color: #171f2a; color: white; outline: none; width: 90%; font-size: 1rem; resize: none" name="comment" id="comment-inp" placeholder="Yorum"></textarea>
+          <textarea onkeyup="adjustHeight(this)" type="text" style="border: none; border-bottom: 1px solid rgb(200, 200, 200); background-color: #171f2a; color: white; outline: none; width: 90%; font-size: 1rem; resize: none" name="comment" id="comment-inp" placeholder="Comment"></textarea>
           <br>
-          <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px" onclick="document.location = '/follow-tag/{{ tag_name }}'" class="button-main-register">Paylaş</button>
+          <button style="height: 30px; padding: 0; margin-top: 5px; width: 100px" onclick="document.location = '/follow-tag/{{ tag_name }}'" class="button-main-register">Share</button>
       </form>
       <br>
       {% for i in comments %}

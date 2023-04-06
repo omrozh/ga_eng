@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/scripts/home/utils.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <title>GrandAssembly | The global discussion</title>
+    <link rel="stylesheet" href="/styles/account/index.css">
+  <link rel="stylesheet" href="/styles/home/index.css">
+  <script src="https://kit.fontawesome.com/a6c8be30d8.js" crossorigin="anonymous"></script>
+</head>
+<body style="padding-bottom: 15px">
+  <div class="header-main" style="z-index: 99">
+      <img src="/static/grandassembly.png" onclick="document.location = '/'" id="assembly-logo" alt="">
+      <span style="float: left; margin-top: 15px" onclick="document.location = '/'">GrandAssembly</span></div>
+        <div style="z-index: 9999; position: relative">
+            {% if not user.is_authenticated %}
+                <button style="position: fixed; right: 25px; top: 4px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/login'" class="">Login</button>
+            {% else %}
+                <button style="position: fixed; right: 25px; top: 4px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/choose'" class="">Accounts</button>
+            {% endif %}
+        </div>
+  <div class="side-menu">
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Headlines</h1>
+      <hr style="width: 90%">
+      <ul id="top-headers">
+
+      </ul>
+      {% if is_authenticated %}
+      <div style="margin: 15px; position: fixed; bottom: 0px">
+          <hr style="width: 18vw">
+          @{{ user.username }}
+            <p style="color: gray">{{ user.balance }}</p>
+        <button style="position: fixed; left: 15vw; bottom: 50px; font-size: 1rem; margin-top: 5px;  color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/trading'">Buy Tokens</button>
+      </div>
+      {% endif %}
+  </div>
+  <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
+      <h1 style="margin-left: 15px; margin-top: 50px">Trend Tags</h1>
+      <hr style="width: 90%">
+      <ul id="tags-trending">
+      </ul>
+      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Share</button>
+  </div>
+  <br>
+  <br>
+  {% if is_authenticated %}
+  <div style="width: 100%; position: fixed; bottom: 0; height: 70px; background-color: #171f2a; padding: 15px; z-index: 99" id="bottom-menu">
+        @{{ user.username }}
+        <p style="color: gray">{{ user.balance }} GAT</p>
+                  <i style="position: fixed; right: 75px; bottom: 40px; font-size: 2rem" onclick="document.location = '/whats-popular'" class="fa-solid fa-hashtag"></i>
+
+        <i style="position: fixed; right: 10px; bottom: 40px; font-size: 2rem" onclick="document.location = '/trading'" class="fa-solid fa-coins"></i>
+  </div>
+  {% endif %}
+  <div class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
+      <h1>@{{ tag_name }}
+          {% if is_verified %}
+            <i class="far fa-check-circle" style="font-size: 30px; color: dodgerblue; margin-left: 5px"></i></h1>
+            {% endif %}
+      <p style="color: gray">Number of followers: {{ number_of_subs }}</p>
+      <br>
+      {% if user.is_admin %}
+            <p>{{ user_info.email }}</p>
+        {% endif %}
+      {% if not tag_is_followed %}
+        <button style="height: 50px; padding: 10px" onclick="document.location = '/account/follow/{{ user_info.id }}'" class="button-main-register">Follow This User</button>
+      {% elif tag_is_followed %}
+        <button style="height: 50px; padding: 10px; background-color: darkgrey" onclick="document.location = '/account/unfollow/{{ user_info.id }}'" class="button-main-register">Stop Following This User</button>
+      {% endif %}
+  </div>
+  {% for post in posts %}
+    <div onclick="document.location = '/view-post/{{ post.id }}'" class="news-feed load-more" style="margin-top: 70px; padding-left: 15px; box-shadow: none; border: none">
+      <div style="position: relative; top: 20px; float: right; margin-right: 15px">
+          <i onclick="document.location = '/moonvote/{{ post.post_id }}'" style="font-size: 1.5rem; margin-right: 10px" class="fa-regular fa-arrow-trend-up"></i>
+          <span>{{ post.net_votes }}</span>
+            <i style="margin-left: 10px; font-size: 1.5rem" onclick="document.location = '/hellvote/{{ post.post_id }}'" class="fa-regular fa-arrow-trend-down"></i>
+      </div>
+        <p style="color: gray">@{{ user_info.username }}</p>
+        <h1>{{ post.title }}</h1>
+      <p>{{ post.text_body }}</p>
+        <span style="color: gray;">Read More...</span>
+    {% if post.has_image %}
+      <img src="{{ post.image_uri }}" style="width: 100%;" alt="">
+    {% endif %}
+      <br>
+      <br>
+
+      {% for i in comments %}
+          <div style="border: 1px solid #e3e3e3; border-radius: 5px; padding-left: 15px; margin-top: 10px">
+            <p style="color: #888888; font-size: 12px">{{ i.commenter }}</p>
+            <p style="color: black; font-size: 1rem">{{ i.content }}</p>
+          </div>
+      {% endfor %}
+  </div>
+  {% endfor %}
+  <script>
+      getTrendingTags()
+      getPostsTopPosts()
+  </script>
+</body>
+</html>

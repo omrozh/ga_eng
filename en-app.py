@@ -699,7 +699,7 @@ def whats_popular():
         ]
     highlights_exist = len(highlights) > 0
 
-    return flask.render_template("/posts/whats_popular.html", is_authenticated=current_user.is_authenticated,
+    return flask.render_template("en/posts/whats_popular.html", is_authenticated=current_user.is_authenticated,
                                  user=current_user,
                                  highlights=highlights, highlights_exist=highlights_exist)
 
@@ -731,7 +731,7 @@ def index():
         return flask.redirect("/account/register")
     highlights_exist = len(highlights) > 0
 
-    return flask.render_template("index.html", is_authenticated=current_user.is_authenticated, user=current_user,
+    return flask.render_template("en/index.html", is_authenticated=current_user.is_authenticated, user=current_user,
                                  highlights=highlights, highlights_exist=highlights_exist,
                                  user_has_new_notification=user_has_new_notification)
 
@@ -750,7 +750,7 @@ def account_view(username):
     is_verified = True if Compliant.query.filter_by(post_fk=username).first() else True if user_info.is_admin else False
     posts.reverse()
 
-    return flask.render_template("posts/user_view.html", tag_name=username, user=current_user, posts=posts,
+    return flask.render_template("en/posts/user_view.html", tag_name=username, user=current_user, posts=posts,
                                  is_authenticated=current_user.is_authenticated, tag_is_followed=tag_is_followed,
                                  user_info=user_info, number_of_subs=number_of_subs, is_verified=is_verified)
 
@@ -1283,7 +1283,7 @@ def new_post():
 
         return flask.redirect("/")
 
-    return flask.render_template("posts/new_post.html")
+    return flask.render_template("en/posts/new_post.html")
 
 
 @app.route("/interact-poll/q=<question_id>", methods=["POST", "GET"])
@@ -1384,7 +1384,7 @@ def report_post(post_id):
 
         return flask.redirect("/")
 
-    return flask.render_template("posts/report_post.html")
+    return flask.render_template("en/posts/report_post.html")
 
 
 @app.route("/view-post/<post_id>", methods=["POST", "GET"])
@@ -1519,7 +1519,7 @@ def view_post(post_id):
     is_verified = True if Compliant.query.filter_by(
         post_fk=post.get("creator_username")).first() else True if creator.is_admin else False
 
-    return flask.render_template("posts/post_view.html", post=post, user=current_user, user_followed=user_followed,
+    return flask.render_template("en/posts/post_view.html", post=post, user=current_user, user_followed=user_followed,
                                  is_authenticated=current_user.is_authenticated, is_poll=is_poll, creator=creator,
                                  post_list=post_list,
                                  comments=Comment.query.filter_by(post_fk=post_id), is_verified=is_verified,
@@ -1589,7 +1589,7 @@ def view_tag_ui(tag_name):
     if tag_name == "unlisted":
         return flask.redirect("/")
     tag_is_followed = tag_name in [i.followed_fk for i in Follow.query.filter_by(follower_fk=current_user.id).all()]
-    return flask.render_template("posts/tag_view.html", tag_name=tag_name, user=current_user,
+    return flask.render_template("en/posts/tag_view.html", tag_name=tag_name, user=current_user,
                                  is_authenticated=current_user.is_authenticated, tag_is_followed=tag_is_followed)
 
 
@@ -1694,7 +1694,7 @@ def search_comprehensive():
 
     is_searchable = len(content_search) == 0
 
-    return flask.render_template("search.html", tag_search=tag_and_user_search, content_search=content_search,
+    return flask.render_template("en/search.html", tag_search=tag_and_user_search, content_search=content_search,
                                  user=current_user, similar_users=similar_users, search_query=query,
                                  is_searchable=is_searchable)
 

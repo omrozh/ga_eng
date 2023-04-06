@@ -137,18 +137,18 @@
                    document.getElementById("accounts").style.top = "15px"
                }
            </script>
-                <center id="verify_number_alert" style="color: white; background-color: red; width: 100%; margin-top: 0; padding-top: 5px; padding-bottom: 5px"><a href="/verify_sms" style="color: white">Emailini onayla</a> 500 token kazan. <span style="text-decoration: underline; margin-left: 25px" onclick="close_alert()">Kapat</span></center>
+                <center id="verify_number_alert" style="color: white; background-color: red; width: 100%; margin-top: 0; padding-top: 5px; padding-bottom: 5px"><a href="/verify_sms" style="color: white">Verify your email </a> get 500 tokens for free. <span style="text-decoration: underline; margin-left: 25px" onclick="close_alert()">Kapat</span></center>
             {% endif %}
            {% endif %}
 	<div id="logo-div">
 	        <img src="/static/grandassembly.png" id="assembly-logo" alt="" style="margin-top: 10px">
         </div>
-	<input id="search-input" onchange="document.location = '/search_query?query=' + this.value" style="border-bottom: 1px solid; background-color: transparent; color: white; border-image: linear-gradient(to right, #4285F4 25%, #DB4437 25%, #F4B400 50%,#0F9D58 50%, #0F9D58 75%, #F4B400 75%) 5; border-left: none; border-right: none; border-top: none;" placeholder="Arama Yap" type="text">
+	<input id="search-input" onchange="document.location = '/search_query?query=' + this.value" style="border-bottom: 1px solid; background-color: transparent; color: white; border-image: linear-gradient(to right, #4285F4 25%, #DB4437 25%, #F4B400 50%,#0F9D58 50%, #0F9D58 75%, #F4B400 75%) 5; border-left: none; border-right: none; border-top: none;" placeholder="Search" type="text">
 	<div style="z-index: 9999; position: relative">
             {% if not user.is_authenticated %}
-                <button style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/login'" class="">Giriş Yap</button>
+                <button style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/login'" class="">Login</button>
             {% else %}
-                <button id="accounts" style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/choose'" class="">Hesaplar</button>            {% endif %}
+                <button id="accounts" style="position: fixed; right: 25px; top: 15px; color: gray; background-color: transparent; border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/account/choose'" class="">Accounts</button>            {% endif %}
         </div>
            {% if user.is_authenticated %}
             {% if not user.did_verify_phone_number %}
@@ -160,7 +160,7 @@
            {% endif %}
   <div class="side-menu">
 <img src="/static/grandassembly.png" id="assembly-logo" alt=""><span style="float: left; margin-top: 15px">GrandAssembly</span>
-      <h1 style="margin-left: 15px; margin-top: 100px">Trend Başlıklar</h1>
+      <h1 style="margin-left: 15px; margin-top: 100px">Trend Headlines</h1>
       <hr style="width: 90%">
       <ul id="top-headers" style="width: 80%">
 
@@ -172,23 +172,23 @@
           <span onclick="document.location = '/account/{{ user.username }}'">@{{ user.username }}</span>
             <br>
             {% if not user_has_new_notification %}
-                <a href="/account/notifications" style="color: dodgerblue; text-decoration: none">Bildirimler</a>
+                <a href="/account/notifications" style="color: dodgerblue; text-decoration: none">Notifications</a>
             {% else %}
-                <a href="/account/notifications" style="color: indianred; text-decoration: none">Bildirimler</a>
+                <a href="/account/notifications" style="color: indianred; text-decoration: none">Notifications</a>
             {% endif %}
             <p style="color: gray; margin-top: 0">{{ user.balance }}</p>
-            <button style="position: fixed; left: 15vw; bottom: 50px; font-size: 1rem; margin-top: 5px;  color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/trading'">Token Al</button>
+            <button style="position: fixed; left: 15vw; bottom: 50px; font-size: 1rem; margin-top: 5px;  color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px;" onclick="document.location = '/trading'">Buy Token</button>
       </div>
       {% endif %}
   </div>
   <div class="side-menu" style="right: 0; border-left: 1px solid rgb(220, 220, 220)">
-      <h1 style="margin-left: 15px; margin-top: 100px">Trend Tagler</h1>
+      <h1 style="margin-left: 15px; margin-top: 100px">Trend Tags</h1>
       <hr style="width: 90%">
       <ul id="tags-trending">
       </ul>
-      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Paylaş</button>
+      <button style="color: white; background-color: rgb(29, 155, 240); border: none; border-radius: 50px; font-size: 1rem; padding: 10px; width: 90%; margin-left: 5%; margin-top: 10%" onclick="window.open('/new/post')" class="">Share</button>
         {% if highlights_exist %}
-            <p style="color: gray; margin-top: 20px; margin-left: 5%">Takip Ettiğiniz Hesaplardan Öneriler</p>
+            <p style="color: gray; margin-top: 20px; margin-left: 5%">Recommendations from followed accounts</p>
             <div style="width: 90%; display: inline-block; margin-left: 5%; margin-top: 25px; max-height: 90px; overflow-y: auto;">
                   {% for i in highlights %}
                     <strong style="color: white; text-decoration: underline" onclick="document.location = '/view-post/{{ i.post_id }}'">{{ i.post_title }}</strong>

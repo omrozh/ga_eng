@@ -79,20 +79,20 @@
         Post
     </div>
     <form id="content" method="post" enctype="multipart/form-data">
-      <input oninput="window.active_elem = this;" id="title" name="title" style="font-size: 16px; border-bottom: 1px solid dodgerblue" type="text" placeholder="Başlık Ekle...">
-      <textarea oninput="window.active_elem = this;" name="text_body" placeholder="İçerik" id="editor" style="width: 100%; outline: none; resize: none; padding: 5px; font-family: Verdana; font-size: 12px; margin-top: 15px"></textarea>
+      <input oninput="window.active_elem = this;" id="title" name="title" style="font-size: 16px; border-bottom: 1px solid dodgerblue" type="text" placeholder="Title">
+      <textarea oninput="window.active_elem = this;" name="text_body" placeholder="Body" id="editor" style="width: 100%; outline: none; resize: none; padding: 5px; font-family: Verdana; font-size: 12px; margin-top: 15px"></textarea>
       <br>
-      <p style="margin-top: 15px; color: white">Video veya Görsel Yükle - 20MB Dosya Boyut Limiti</p>
-      <label for="main-picture" class="label-upload" style="color: white">İçeriğe Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" name="image_file" type="file" id="main-picture" hidden>
+      <p style="margin-top: 15px; color: white">Add Video or Image - File Size up to 20MB</p>
+      <label for="main-picture" class="label-upload" style="color: white">Add File</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" name="image_file" type="file" id="main-picture" hidden>
       <br>
       <div id="ai_div" style="display: none">
-        <p>Yapay Zeka'nın Adı</p>
-        <input type="text" class="text-form-input" style="max-width: 90%" name="ai_name" placeholder="Yasin">
-        <p>Karakteri</p>
-        <textarea type="text" class="text-form-input" style="height: 150px; max-width: 90%" name="chat_persona" placeholder="18 yaşlarında, erkek bir lise öğrencisisin. Arkadaşlarınla buluşmaktan ve tiktok izlemekten hoşlanıyorsun..."></textarea>
+        <p>Character Name</p>
+        <input type="text" class="text-form-input" style="max-width: 90%" name="ai_name" placeholder="Alex Jones">
+        <p>Character Description</p>
+        <textarea type="text" class="text-form-input" style="height: 150px; max-width: 90%" name="chat_persona" placeholder="Very aggressive TV representer..."></textarea>
       </div>
-      <p id="add_ai_label">İçeriğine vereceğin karaktere sahip bir yapay zeka ekle.</p>
-      <input onclick="enableChat()" id="ai-enable-button" type="button" value="Yapay Zeka Kişiliği Ekle" class="label-upload" style="border: 1px solid dodgerblue; margin-top: 0">
+      <p id="add_ai_label">Add AI Character Model to Post</p>
+      <input onclick="enableChat()" id="ai-enable-button" type="button" value="Add AI Character" class="label-upload" style="border: 1px solid dodgerblue; margin-top: 0">
       <input type="checkbox" name="add_chat" style="display: none" id="add_chat_persona">
       <br style="clear: both">
       <br>
@@ -103,31 +103,31 @@
           <div style="float: left">
           <div class="checkbox-rect">
           <input type="checkbox" id="checkbox-rect1" name="add_test">
-          <label onclick="addTest()" for="checkbox-rect1" style="margin-top: 25px; color: white">Test Ekle</label>
+          <label onclick="addTest()" for="checkbox-rect1" style="margin-top: 25px; color: white">Add Test</label>
         </div>
         </div>
         <div class="check-div">
           <div class="checkbox-rect">
           <input type="checkbox" id="checkbox-id-2" name="add_test">
-          <label onclick="addTestInteractive()" for="checkbox-id-2" style="margin-top: 25px; color: white">İnteraktif İçerik Ekle</label>
+          <label onclick="addTestInteractive()" for="checkbox-id-2" style="margin-top: 25px; color: white">Add Interactive Content</label>
           </div>
         </div>
           <div class="check-div">
             <div class="checkbox-rect">
               <input type="checkbox" id="checkbox-id-3" name="add_poll">
-              <label onclick="addPoll()" for="checkbox-id-3" style="margin-top: 25px; color: white">Anket Ekle</label>
+              <label onclick="addPoll()" for="checkbox-id-3" style="margin-top: 25px; color: white">Add Poll</label>
             </div>
           </div>
           <div class="check-div">
             <div class="checkbox-rect">
               <input type="checkbox" id="checkbox-id-4" name="add_tok_poll">
-              <label onclick="addPoll()" for="checkbox-id-4" style="margin-top: 25px; color: white">Tokenli Anket Ekle</label>
+              <label onclick="addPoll()" for="checkbox-id-4" style="margin-top: 25px; color: white">Add Token Poll</label>
             </div>
           </div>
           <div class="check-div">
             <div class="checkbox-rect">
               <input type="checkbox" id="checkbox-id-5" name="add_list">
-              <label onclick="addList()" for="checkbox-id-5" style="margin-top: 25px; color: white">Liste Ekle</label>
+              <label onclick="addList()" for="checkbox-id-5" style="margin-top: 25px; color: white">Add List</label>
             </div>
           </div>
         </div>
@@ -151,7 +151,7 @@
       </div>
       <div id="footer">
         <div id="footer-left">
-          <input class="btn btn-primary" style="background-color: dodgerblue" value="Paylaş" onclick="saveTest()" type="button">
+          <input class="btn btn-primary" style="background-color: dodgerblue" value="Share" onclick="saveTest()" type="button">
         </div>
       </div>
       <br>
@@ -203,7 +203,7 @@
         xhr.onreadystatechange = () => {
           if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             if(xhr.responseText === "Failed"){
-              let ok = confirm("Bu özelliği kullanmaya henüz elverişli değilsiniz")
+              let ok = confirm("You are ineligible to access this feature")
               if(ok){
                 window.open("/ai/waitinglist")
               }
@@ -217,12 +217,12 @@
             }
           }
           else{
-            current_editor.value = "Yapay Zeka Şu Anda Çok Yoğun  - Tekrar Dene\n" + prev_val
+            current_editor.value = "AI is too busy  - Try Again Later\n" + prev_val
           }
         }
         xhr.send("content=" + current_editor.value);
         let prev_val = current_editor.value
-        current_editor.value = "Lütfen Bekleyin..."
+        current_editor.value = "Please Wait..."
       }
       function adjustHeight(el){
             el.style.height = (el.scrollHeight > el.clientHeight) ? (el.scrollHeight)+"px" : "60px";
@@ -251,7 +251,7 @@
       }
       window.question_index = 0
       function addOptionInteractive(index_cr){
-        let option = `<input class="text-form-input"  oninput="window.active_elem = this;" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 20%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Sonraki Soru No" name="text-answer-val-a-q-${index_cr}"><br><br>`
+        let option = `<input class="text-form-input"  oninput="window.active_elem = this;" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Option" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 20%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Next Question No" name="text-answer-val-a-q-${index_cr}"><br><br>`
         let new_option = document.createElement("div")
         new_option.oninput = function(e) {
           let field=document.getElementsByName(`text-answer-val-a-q-${index_cr}`);
@@ -269,7 +269,7 @@
       window.outcome_index = 0
       function createQuestionInteractive(){
         window.question_index += 1
-        let question = `<div id="question-${window.question_index}"><input  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input"  oninput="window.active_elem = this;" style="width: 80%; margin-top: 50px" placeholder="${window.question_index}) Segment"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Segmente Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" oninput="window.active_elem = this;" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 20%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Sonraki No" oninput="addQ(${window.question_index})" name="text-answer-val-a-q-${window.question_index}"><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOptionInteractive(${window.question_index})">Şık Ekle</button><div>`
+        let question = `<div id="question-${window.question_index}"><input  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input"  oninput="window.active_elem = this;" style="width: 80%; margin-top: 50px" placeholder="${window.question_index}) Segment"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Add Image</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Chosen'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" oninput="window.active_elem = this;" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Option" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 20%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Next No" oninput="addQ(${window.question_index})" name="text-answer-val-a-q-${window.question_index}"><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOptionInteractive(${window.question_index})">Add Option</button><div>`
         let new_question = document.createElement("div")
         new_question.innerHTML = question
         document.getElementById("insert-questions-div").appendChild(new_question)
@@ -297,11 +297,11 @@
               addTest()
               document.getElementById("out-btn").style.display = "none";
               document.getElementById("question-add-button").onclick = addListPoint;
-              document.getElementById("question-add-button").innerText = "Öğe Ekle"
+              document.getElementById("question-add-button").innerText = "Add Segment"
             }
             function addListPoint(){
               window.question_index += 1
-              let question = `<div id="question-${window.question_index}"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Öğeye Görsel Ekle</label><input onchange="this.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><br><textarea onkeyup="adjustHeight(this)" oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" name="question_add" class="text-form-input" style="resize: none; width: 90%; margin-top: 50px; font-size: 12px; padding: 15px" placeholder="İçerik"></textarea><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px; display: none" type="text" oninput="window.active_elem = this;" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" type="text" placeholder="Puanı" value="1" name="text-answer-val-a-q-${window.question_index}"></div><button class="btn btn-primary" style="background-color: #e86b5a; display: none" type="button" onclick="addOptionPoll(${window.question_index})">Şık Ekle</button><div>`
+              let question = `<div id="question-${window.question_index}"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Add Image</label><input onchange="this.previousSibling.innerText = 'Chosen'" type="file" id="file-a-q-${window.question_index}" hidden><br><textarea onkeyup="adjustHeight(this)" oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" name="question_add" class="text-form-input" style="resize: none; width: 90%; margin-top: 50px; font-size: 12px; padding: 15px" placeholder="Content"></textarea><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px; display: none" type="text" oninput="window.active_elem = this;" placeholder="x) Option" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" type="text" placeholder="Point" value="1" name="text-answer-val-a-q-${window.question_index}"></div><button class="btn btn-primary" style="background-color: #e86b5a; display: none" type="button" onclick="addOptionPoll(${window.question_index})">Add Option</button><div>`
               let new_question = document.createElement("div")
               new_question.innerHTML = question
               document.getElementById("out-btn").style.display = "none"
@@ -310,27 +310,27 @@
             window.question_index = 0
             function createQuestionPoll(){
               window.question_index += 1
-              let question = `<div id="question-${window.question_index}"><input oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input" style="width: 80%; margin-top: 50px" placeholder="Soru"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Soruya Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px" type="text" oninput="window.active_elem = this;" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" type="text" placeholder="Puanı" value="1" name="text-answer-val-a-q-${window.question_index}"><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOptionPoll(${window.question_index})">Şık Ekle</button><div>`
+              let question = `<div id="question-${window.question_index}"><input oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input" style="width: 80%; margin-top: 50px" placeholder="Question"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Add Image</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Chosen'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px" type="text" oninput="window.active_elem = this;" placeholder="x) Option" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" type="text" placeholder="Point" value="1" name="text-answer-val-a-q-${window.question_index}"><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOptionPoll(${window.question_index})">Add Option</button><div>`
               let new_question = document.createElement("div")
               new_question.innerHTML = question
               document.getElementById("out-btn").style.display = "none"
               document.getElementById("insert-questions-div").appendChild(new_question)
             }
             function addOptionPoll(index_cr){
-              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" value="1" type="text" placeholder="Puanı" name="text-answer-val-a-q-${index_cr}"><br><br>`
+              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Option" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px; display: none" value="1" type="text" placeholder="Point" name="text-answer-val-a-q-${index_cr}"><br><br>`
               let new_option = document.createElement("div")
               new_option.innerHTML = option
               document.getElementById("options-" + index_cr).appendChild(new_option)
             }
             function addOption(index_cr){
-              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Seçenek" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Puanı" name="text-answer-val-a-q-${index_cr}"><button style="margin-left: 15px; background-color: limegreen; color: white" type="button" class="btn btn-primary" onclick="makeRightAnswer(this, 'text-answer-val-a-q-${window.question_index}')">Doğru Cevap (Opsiyonel)</button><br><br>`
+              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="x) Option" name="text-answer-a-q-${index_cr}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Point" name="text-answer-val-a-q-${index_cr}"><button style="margin-left: 15px; background-color: limegreen; color: white" type="button" class="btn btn-primary" onclick="makeRightAnswer(this, 'text-answer-val-a-q-${window.question_index}')">Mark As Correct(Optional)</button><br><br>`
               let new_option = document.createElement("div")
               new_option.innerHTML = option
               document.getElementById("options-" + index_cr).appendChild(new_option)
             }
             window.outcome_index = 0
             function addOutcome(){
-              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="Çıkması İstenen Sonuç" name="outcome" id="outcome-${window.outcome_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Puanı" id="outcome-point-${window.outcome_index}"><br><br>`
+              let option = `<input oninput="window.active_elem = this;" class="text-form-input" style="width: 40%; margin-top: 25px" type="text" placeholder="Desired Outcome" name="outcome" id="outcome-${window.outcome_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Point" id="outcome-point-${window.outcome_index}"><br><br>`
               window.outcome_index += 1
               let new_option = document.createElement("div")
               new_option.innerHTML = option
@@ -345,7 +345,7 @@
             }
             function createQuestion(){
               window.question_index += 1
-              let question = `<div id="question-${window.question_index}"><input oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input" style="width: 80%; margin-top: 50px" placeholder="Soru"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Soruya Görsel Ekle</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Seçildi'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px" type="text" oninput="window.active_elem = this;" placeholder="x) Seçenek" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Puanı" name="text-answer-val-a-q-${window.question_index}"><button style="margin-left: 15px; background-color: limegreen; color: white" type="button" class="btn btn-primary" onclick="makeRightAnswer(this, 'text-answer-val-a-q-${window.question_index}')">Doğru Cevap (Opsiyonel)</button><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOption(${window.question_index})">Şık Ekle</button><div>`
+              let question = `<div id="question-${window.question_index}"><input oninput="window.active_elem = this;"  id="q_actual-${window.question_index}" type="text" name="question_add" class="text-form-input" style="width: 80%; margin-top: 50px" placeholder="Question"><br><br><label for="file-a-q-${window.question_index}" class="label-upload" style="color: white">Add Image</label><br><input onchange="this.previousSibling.previousSibling.innerText = 'Chosen'" type="file" id="file-a-q-${window.question_index}" hidden><div id="options-${window.question_index}"><input class="text-form-input" style="width: 40%; margin-top: 25px" type="text" oninput="window.active_elem = this;" placeholder="x) Option" name="text-answer-a-q-${window.question_index}"><input class="text-form-input" style="width: 10%; margin-top: 25px; margin-left: 10px" type="text" placeholder="Point" name="text-answer-val-a-q-${window.question_index}"><button style="margin-left: 15px; background-color: limegreen; color: white" type="button" class="btn btn-primary" onclick="makeRightAnswer(this, 'text-answer-val-a-q-${window.question_index}')">Mark As Correct(Optional)</button><br><br></div><button class="btn btn-primary" style="background-color: #e86b5a" type="button" onclick="addOption(${window.question_index})">Add Option</button><div>`
               let new_question = document.createElement("div")
               new_question.innerHTML = question
               document.getElementById("insert-questions-div").appendChild(new_question)

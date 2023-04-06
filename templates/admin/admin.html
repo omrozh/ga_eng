@@ -64,7 +64,19 @@
   </div>
   <div class="news-feed load-more" style="padding: 15px">
     {% for user_i in user_list %}
-      <p class="user-p" onclick="window.open('/admin/delete-user/{{ user_i.id }}')">{{ user_i.username }} | {{ user_i.email }}</p>
+      <p class="user-p" onclick="deleteUser('{{ user_i.id }}')">{{ user_i.username }} | {{ user_i.email }}</p>
+    {% endfor %}
+    <script>
+      function deleteUser(user_id){
+        if(confirm("Bu kullanıcıyı silmek istediğinize emin misiniz?") === true) {
+          window.open(`/admin/delete-user/${user_id}`)
+        }
+      }
+    </script>
+  </div>
+  <div class="news-feed load-more" style="padding: 15px">
+    {% for user_i in user_list %}
+      <p class="user-p" onclick="document.location = '/admin/invite-to-affiliate/{{ user_i.id }}'">{{ user_i.username }} | {{ user_i.email }} | Invite Affiliate</p>
     {% endfor %}
   </div>
 </body>
